@@ -1,6 +1,6 @@
 # Merch Inc. Model Call
 
-A web platform to streamline the **model call process** for Merch Inc.’s semester fashion shows.  
+A web platform to streamline the **model call process** for Merch Inc.’s biannual fashion shows.  
 
 This project replaces the current messy, manual process (shared laptops, forgotten numbers, confusing picks) with a **simple, transparent, and organized system**.
 
