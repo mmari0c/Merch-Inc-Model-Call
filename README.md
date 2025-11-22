@@ -1,4 +1,4 @@
-# Merch Inc. Model Call
+# Merch Model Call
 
 A web platform to streamline the **model call process** for Merch Inc.’s biannual fashion shows.  
 
