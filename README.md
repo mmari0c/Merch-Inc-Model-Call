@@ -28,10 +28,10 @@ This project addresses these challenges by providing:
 
 
 ## Tech Stack (Planned)
-- **Frontend:** React + Next.js  
+- **Frontend:** React  
 - **Styling:** Tailwind CSS  
 - **Backend:** Supabase (Auth, Database, Storage, Realtime)  
-- **Deployment:** TBD   
+- **Deployment:** Netlify   
 
 
 ## Roadmap
