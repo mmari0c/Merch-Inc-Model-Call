@@ -2,6 +2,7 @@ import StageStatus from '../components/StageStatus.jsx'
 import { icons } from '../icons.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ModelCard from '../components/ModelCard.jsx'
+import Favorites from '../components/Favorites.jsx'
 
 function DesignerPortal() {
 
@@ -26,7 +27,7 @@ function DesignerPortal() {
         />
       </div>
 
-      <div className='w-full bg-violet-50 p-6 rounded-xl border-2 border-gray-200 text-xs text-violet-950'>
+      <div className='w-full bg-violet-50 p-6 rounded-xl border-2 border-violet-100 text-xs text-violet-950'>
         <p>Selection Instructions</p>
         <ol className='list-decimal space-y-4 m-6'>
           <li>
@@ -66,18 +67,37 @@ function DesignerPortal() {
         </select>
       </div>
 
-      <div className='w-full flex flex-col gap-5'>
-        {/* MODEL CARDS GO HERE */}
-        {models.map((model) => (
-          <ModelCard
-            key={model.modelNumber}
-            name={model.name}
-            modelNumber={model.modelNumber}
-            isFavorite={model.isFavorite}
-            available={model.available}
-          />
-        ))}
+      <div className='flex flex-col w-full gap-6 mb-5 sm:flex-row sm:items-start sm:gap-5'>
+        <div className='w-full flex flex-col gap-5 sm:w-2/3 lg:grid lg:grid-cols-2 lg:gap-4 lg:w-3/4 xl:grid-cols-3'>
+          {/* MODEL CARDS GO HERE */}
+          {models.map((model) => (
+            <ModelCard
+              key={model.modelNumber}
+              name={model.name}
+              modelNumber={model.modelNumber}
+              isFavorite={model.isFavorite}
+              available={model.available}
+              className="sm:w-1/2"
+            />
+          ))}
+        </div>
+
+        <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 sm:w-1/3 lg:w-1/4'>
+          <p>Starlist</p>
+          <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors'>
+            Add Self
+          </button>
+          {favorites.map((fav, index) => (
+            <Favorites
+              key={fav.modelNumber}
+              index={index}
+              name={fav.name}
+              modelNumber={fav.modelNumber}
+            />
+          ))}
+        </div>
       </div>
+
     </section>
   )
 }

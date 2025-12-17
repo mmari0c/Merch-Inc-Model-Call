@@ -3,8 +3,8 @@ import { icons } from '../icons.js'
 
 function ModelCard({ name, modelNumber, isFavorite, available }) {
   return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3">
-      <div className="w-full h-100 bg-gray-100 rounded-lg" aria-hidden="true" />
+    <div className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow flex flex-col gap-3">
+      <div className="w-full h-100 bg-gray-100 rounded-lg lg:h-50" aria-hidden="true" />
       <div>
         <h3 className="font-medium">{name}</h3>
         <p className="text-gray-500">#{modelNumber}</p>
