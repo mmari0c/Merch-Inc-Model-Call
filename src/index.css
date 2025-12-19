@@ -2,6 +2,20 @@
 
 @import "tailwindcss";
 
+@theme {
+  --color-sand-50: #F7F4F1;
+  --color-sand-100: #EFE8E2;
+  --color-sand-200: #E1D5CA;
+  --color-sand-300: #D3C2B2;
+  --color-sand-400: #C6B1A0;
+  --color-sand-500: #B29A87;
+  --color-sand-600: #9A7F6C;
+  --color-sand-700: #7E6554;
+  --color-sand-800: #5F4C3F;
+  --color-sand-900: #3F332B;
+}
+
+
 
 body {
   font-family: 'Poppins', sans-serif;
