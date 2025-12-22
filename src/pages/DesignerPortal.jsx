@@ -1,23 +1,83 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import StageStatus from '../components/StageStatus.jsx'
 import { icons } from '../icons.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ModelCard from '../components/ModelCard.jsx'
 import Favorites from '../components/Favorites.jsx'
+import ModelDetails from '../components/ModelDetails.jsx'
+import FinalSelection from '../components/FinalSelection.jsx'
 
 function DesignerPortal() {
 
+  const [modelsList, setModelList] = useState([])
+  const [filteredModels, setFilteredModels] = useState([])
   const [selectedModel, setSelectedModel] = useState(null)
+  const [favoriteModels, setFavoriteModels] = useState([])
+  const [finalSelection, setFinalSelection] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [genderFilter, setGenderFilter] = useState('')
+  const [ethnicityFilter, setEthnicityFilter] = useState('')
 
   const models = [
-    { name: "Mario Nolasco", modelNumber: "M-001", isFavorite: true, available: true },
-    { name: "Anna Smith", modelNumber: "M-002", isFavorite: false, available: true },
-    { name: "Liam Johnson", modelNumber: "M-003", isFavorite: true, available: false },
-    { name: "Sophia Lee", modelNumber: "M-004", isFavorite: false, available: true },
-    { name: "Ethan Brown", modelNumber: "M-005", isFavorite: false, available: true },
+    { name: "Mario Nolasco", modelNumber: "M-001", isFavorite: true, available: true, gender: "male", ethnicity: "latino", height: "6'1\"", weight: "180 lbs", measurements: { chest: "40\"", waist: "32\"", hips: "38\"" } },
+    { name: "Anna Smith", modelNumber: "M-002", isFavorite: false, available: true, gender: "female", ethnicity: "caucasian", height: "5'6\"", weight: "140 lbs", measurements: { bust: "34\"", waist: "26\"", hips: "36\"" } },
+    { name: "Liam Johnson", modelNumber: "M-003", isFavorite: true, available: false, gender: "male", ethnicity: "black", height: "5'10\"", weight: "170 lbs", measurements: { chest: "38\"", waist: "30\"", hips: "36\"" } },
+    { name: "Sophia Lee", modelNumber: "M-004", isFavorite: false, available: true, gender: "female", ethnicity: "asian", height: "5'4\"", weight: "120 lbs", measurements: { bust: "32\"", waist: "24\"", hips: "34\"" } },
+    { name: "Ethan Brown", modelNumber: "M-005", isFavorite: false, available: true, gender: "male", ethnicity: "caucasian", height: "6'0\"", weight: "190 lbs", measurements: { chest: "42\"", waist: "34\"", hips: "40\"" } },
   ]
 
-  const favorites = models.filter(model => model.isFavorite)
+  useEffect( () => {
+    // Fetch models from data source
+    // For now, using static data
+    setModelList(models)
+    setFilteredModels(models)
+    setFavoriteModels(models.filter(model => model.isFavorite))
+  }, [])
+
+  useEffect(() => {
+    const term = searchTerm.trim().toLowerCase()
+    const filtered = modelsList.filter((model) => {
+      const matchesSearch =
+        !term ||
+        model.name.toLowerCase().includes(term) ||
+        model.modelNumber.toLowerCase().includes(term)
+      const matchesGender = !genderFilter || model.gender === genderFilter
+      const matchesEthnicity = !ethnicityFilter || model.ethnicity === ethnicityFilter
+      return matchesSearch && matchesGender && matchesEthnicity
+    })
+    setFilteredModels(filtered)
+  }, [modelsList, searchTerm, genderFilter, ethnicityFilter])
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value)
+  }
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target
+    if (name === 'gender') {
+      setGenderFilter(value)
+      return
+    }
+    if (name === 'ethnicity') {
+      setEthnicityFilter(value)
+    }
+  }
+
+  const handleFavoriteToggle = (modelNumber) => {
+    const updatedModels = modelsList.map((model) => {
+      if (model.modelNumber === modelNumber) {
+        return { ...model, isFavorite: !model.isFavorite }
+      }
+      return model
+    })
+    setModelList(updatedModels)
+    setFavoriteModels(updatedModels.filter(model => model.isFavorite))
+  }
+
+  const handleFinalSelection = () => {
+    // Logic to submit final selection
+    alert('Final selection submitted!')
+  }
 
   return (
     <>
@@ -52,12 +112,18 @@ function DesignerPortal() {
 
         <div className='flex flex-col gap-4 w-full md:w-2/3 lg:w-3/4'>
 
-          <input className='w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow bg-gray-100' type="text" placeholder='Search by model number or name (e.g, M-001, Mario...)' />
+          <input
+            className='w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:shadow bg-gray-100'
+            type="text"
+            placeholder='Search by model number or name (e.g, M-001, Mario...)'
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
 
       <div className='flex flex-wrap justify-start gap-3 w-full items-center'>
        <FontAwesomeIcon className='text-lg' icon={icons.filter} />
         <p>Filters: </p>
-        <select name="gender" id="gender" className='bg-gray-100 rounded-lg p-2'>
+        <select name="gender" id="gender" className='bg-gray-100 rounded-lg p-2' value={genderFilter} onChange={handleFilterChange}>
           <option value="">All Genders</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -65,11 +131,11 @@ function DesignerPortal() {
           <option value="other">Other</option>
         </select>
 
-        <select name="ethnicity" id="ethnicity" className='bg-gray-100 rounded-lg p-2'>
+        <select name="ethnicity" id="ethnicity" className='bg-gray-100 rounded-lg p-2' value={ethnicityFilter} onChange={handleFilterChange}>
           <option value="">All Ethnicities</option>
           <option value="latino">Hispanic/Latino</option>
           <option value="black">Black</option>
-          <option value="white">White</option>
+          <option value="caucasian">White</option>
           <option value="asian">Asian</option>
           <option value="middle eastern">Middle Eastern</option>
           <option value="native american">Native American</option>
@@ -80,15 +146,13 @@ function DesignerPortal() {
 
           <div className='w-full grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {/* MODEL CARDS GO HERE */}
-            {models.map((model) => (
+            {filteredModels.map((model) => (
               <ModelCard
                 key={model.modelNumber}
-                name={model.name}
-                modelNumber={model.modelNumber}
-                isFavorite={model.isFavorite}
-                available={model.available}
+                model={model}
                 className="sm:w-1/2"
                 onSelect={() => setSelectedModel(model)}
+                onFavoriteToggle={() => handleFavoriteToggle(model.modelNumber)}
               />
             ))}
           </div>
@@ -96,53 +160,39 @@ function DesignerPortal() {
         </div>
         
 
+        <div className='sm:sticky w-full top-6 flex flex-col gap-6 md:w-1/3 lg:w-1/4 lg:max-w-sm'>
+          <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 h-fit md:top-6'>
+            <p className='flex items-center gap-2'>Starlist <FontAwesomeIcon className='text-amber-500' icon={icons.favoriteSolid}/></p>
+            <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors'>
+              Add Self
+            </button>
+            {favoriteModels.map((fav, index) => (
+              <Favorites
+                key={fav.modelNumber}
+                index={index}
+                name={fav.name}
+                modelNumber={fav.modelNumber}
+              />
+            ))}
+          </div>
 
-        <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 h-fit sm:sticky md:top-6 md:w-1/3 lg:w-1/4 lg:max-w-sm'>
-          <p className='flex items-center gap-2'>Starlist <FontAwesomeIcon className='text-amber-500' icon={icons.favoriteSolid}/></p>
-          <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors'>
-            Add Self
-          </button>
-          {favorites.map((fav, index) => (
-            <Favorites
-              key={fav.modelNumber}
-              index={index}
-              name={fav.name}
-              modelNumber={fav.modelNumber}
-            />
-          ))}
-        </div>
+            <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 h-fit md:top-6'>
+              <p className='flex items-center gap-2'>Final Selection</p>
+              {favoriteModels.map((fav, index) => (
+                <FinalSelection
+                  key={fav.modelNumber}
+                  index={index}
+                  name={fav.name}
+                  modelNumber={fav.modelNumber}
+                />
+              ))}
+            </div>
+        </div>    
       </div>
 
     </section>
     {selectedModel && (
-      <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 text-xs md:text-sm' onClick={() => setSelectedModel(null)}>
-        <div className='bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl m-4' onClick={(e) => e.stopPropagation()}>
-          <h3 className='font-semibold mb-1'>{selectedModel.name}</h3>
-          <p className='text-gray-500 mb-4'>#{selectedModel.modelNumber}</p>
-          <button className='absolute top-3 right-3 text-gray-500 hover:text-gray-700' aria-label='Close details' onClick={() => setSelectedModel(null)}>
-            ✕
-          </button>
-          <div className='w-full h-80 bg-gray-100 rounded-xl mb-4' aria-hidden="true" />
-
-            <div className='flex flex-col gap-2'>
-
-            <p className='flex gap-2 items-center'><strong>Status:</strong><p className={`w-2/5 text-center py-1.5 rounded-lg font-medium sm:w-1/4 ${selectedModel.available ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
-        {selectedModel.available ? 'Available' : 'Unavailable'}
-      </p></p>  
-
-              <p className='text-gray-600'>More profile details, measurements, and experience highlights would be displayed here.</p>
-          </div>
-          <div className='mt-6 flex gap-3'>
-            <button
-              className="mt-auto w-full bg-white border border-gray-200 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <FontAwesomeIcon icon={selectedModel.isFavorite ? icons.favoriteSolid : icons.favorite} />
-              {selectedModel.isFavorite ? 'Starred' : 'Add to Starlist'}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ModelDetails selectedModel={selectedModel} onClose={() => setSelectedModel(null)} onFavoriteToggle={() => handleFavoriteToggle(selectedModel.modelNumber)}  />
     )}
     </>
   )

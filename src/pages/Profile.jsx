@@ -1,8 +1,11 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { icons } from '../icons.js'
+
 function Profile() {
    const profile = {
       name: 'Mario Nolasco',
       modelNumber: 'M-001',
-      email: 'marionolascocortez@gmail.com',
+      email: 'marionolasco@gmail.com',
       phone: '469-555-1234',
       available: false,
    }
@@ -11,10 +14,10 @@ function Profile() {
 
    return (
       <section className="profile-page flex items-center justify-center min-h-screen px-6 py-12 text-xs sm:text-sm">
-         <div className="w-full max-w-5xl flex flex-col items-center gap-8 md:flex-row md:items-start">
-            <div className="bg-white border-2 border-gray-200 rounded-lg p-6 flex flex-col items-center gap-4 w-fit md:sticky md:top-12 md:items-start md:h-fit ">
-               <div className='flex flex-col items-center gap-4 md:flex-row'>
-                  <div className='w-20 h-20 rounded-full bg-gray-100 border-2 border-gray-200 flex items-center justify-center text-gray-400 text-lg font-medium'>
+         <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 md:flex-row md:items-start">
+            <div className="flex flex-col w-full items-center gap-4 md:sticky md:w-fit md:top-12 md:h-fit md:bg-white md:border-2 md:border-gray-200 md:rounded-lg md:p-6  ">
+               <div className='flex w-full flex-col items-center gap-4 md:items-center md:text-center '>
+                  <div className='w-30 h-30 rounded-full bg-gray-100 border-2 border-gray-200 flex items-center justify-center text-gray-400 text-lg font-medium'>
                      {profile.name?.split(' ').map(word => word[0]).join('')}
                   </div>
                   <div>
@@ -22,19 +25,19 @@ function Profile() {
                      <p className='text-gray-500'>Model Number: <span className='font-medium text-gray-700'>{profile.modelNumber}</span></p>
                   </div>
                </div>
-               <div className='flex flex-col items-center gap-1 text-gray-500 md:items-start'>
-                  <p>Email: <span className='text-gray-700 font-medium'>{profile.email}</span></p>
-                  <p>Phone: <span className='text-gray-700 font-medium'>{profile.phone}</span></p>
+               <div className='flex flex-col items-center gap-1 text-gray-500 md:items-center'>
+                  <p><FontAwesomeIcon icon={icons.envelope} className="mr-1" /><span className='text-gray-700 font-medium'>{profile.email}</span></p>
+                  <p><FontAwesomeIcon icon={icons.phone} className="mr-1" /><span className='text-gray-700 font-medium'>{profile.phone}</span></p>
                </div>
                <div className="">
-                  <p className={`w-full text-center p-2 rounded-lg font-medium md:text-left ${profile.available ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
+                  <p className={`w-full text-center p-2 rounded-lg font-medium ${profile.available ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
                   {profile.available ? 'Available' : 'Unavailable'}
                   </p>
                </div>
 
             </div>
 
-            <div>
+            <div className='md:max-w-md'>
 
             <div className="grid gap-6">
                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
@@ -83,7 +86,7 @@ function Profile() {
                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
                   <div>
                      <h3 className='text-base font-semibold'>Photos</h3>
-                     <p className='text-gray-500'>Add up to 8 photos. Your first photo becomes the profile cover shown to designers.</p>
+                     <p className='text-gray-500'>Add up to 6 photos. Your first photo becomes the profile cover shown to designers.</p>
                   </div>
                   <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
                      {photoSlots.map((_, index) => (
@@ -119,8 +122,8 @@ function Profile() {
                </div>
             </div>
 
-            <div className='flex justify-end'>
-               <button type="button" className='bg-violet-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-violet-700 transition-colors'>Save Profile</button>
+            <div className='flex justify-end mt-4'>
+               <button type="button" className='bg-sand-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-sand-700 transition-colors'>Save Profile</button>
             </div>
             </div>
          </div>

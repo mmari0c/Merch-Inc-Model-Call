@@ -12,7 +12,7 @@ function SignUp() {
                   <h1 className='text-xl font-semibold'>Model Call Sign Up</h1>
                   <p className='text-gray-500'>Register as a model or designer to get started.</p>
                </div>
-               <div className="bg-sand-100 border-2 border-gray-200 p-5 rounded-lg flex flex-col gap-4 w-full">
+               <div className="bg-white border-2 border-gray-200 p-5 rounded-lg flex flex-col gap-4 w-full">
                   <div className="flex flex-col gap-1">
                      <label htmlFor="role" className="font-medium">I am a...</label>
                      <select id="role" placeholder="Select Role" className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-sand-400">
