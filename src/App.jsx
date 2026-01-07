@@ -13,9 +13,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/signup" replace />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:modelName" element={<Profile />} />
             <Route path="/model" element={<ModelPortal />} />
-            <Route path="/designer" element={<DesignerPortal />} />
+            <Route path="/designer-portal" element={<DesignerPortal />} />
             <Route path="/admin" element={<AdminPortal />} />
           </Routes>
       </main>

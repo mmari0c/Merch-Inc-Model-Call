@@ -6,7 +6,7 @@ import { data } from 'react-router'
 
 const CAMPAIGN_STAGES = [
   {
-    key: 'regisrationi',
+    key: 'registration',
     label: 'Registration',
     description: 'Models and designers are signing up and creating profiles.'
   },

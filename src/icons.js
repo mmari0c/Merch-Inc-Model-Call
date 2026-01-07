@@ -1,5 +1,5 @@
-import { faClock, faStar, faMessage} from '@fortawesome/free-regular-svg-icons'
-import { faStar as faStarSolid, faCircleInfo, faPencil, faFilter, faCheck, faEnvelope, faPhone, faX
+import { faClock, faStar, faMessage, faPaperPlane} from '@fortawesome/free-regular-svg-icons'
+import { faStar as faStarSolid, faCircleInfo, faPencil, faFilter, faCheck, faEnvelope, faPhone, faX, faPlus, faMagnifyingGlass, faCaretDown
 } from '@fortawesome/free-solid-svg-icons'
 
 export const icons = {
@@ -14,4 +14,9 @@ export const icons = {
   envelope: faEnvelope,
   phone: faPhone,
   close: faX,
+  paperPlane: faPaperPlane,
+  plus: faPlus,
+  search: faMagnifyingGlass,
+  caretDown: faCaretDown
 }
+

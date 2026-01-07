@@ -3,9 +3,6 @@ import { icons } from '../icons.js'
 import MatchItem from './MatchItem.jsx'
 
 function MatchScreen({participants, role}) {
-   console.log(participants)
-   console.log(role)
-
    return (
       <div className='w-full bg-white p-6 rounded-xl border-2 border-gray-200 flex flex-col items-center justify-center gap-4 h-fit mt-6 '>
          <FontAwesomeIcon className='bg-gray-200 p-5 text-lg rounded-full' icon={icons.check}/>
@@ -22,7 +19,6 @@ function MatchScreen({participants, role}) {
          )
          }
          {participants.map((participant) => (
-            console.log(participant),
             <MatchItem key={participant.name} name={participant.name} phone={participant.contact}/>
          ))}
          <div className='bg-gray-100 p-4 rounded-lg w-full'> 

@@ -1,7 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useParams } from 'react-router-dom'
 import { icons } from '../icons.js'
 
 function Profile() {
+   const { modelName } = useParams()
+   console.log('Model Name from URL:', modelName)
+
    const profile = {
       name: 'Mario Nolasco',
       modelNumber: 'M-001',
