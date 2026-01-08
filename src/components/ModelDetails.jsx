@@ -24,11 +24,7 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
           </button>
           <div className='w-full h-80 bg-gray-100 rounded-xl mb-4' aria-hidden="true" />
 
-            <div className='flex flex-col gap-2'>
-
-            <p className='flex gap-2 items-center'><strong>Status:</strong><p className={`w-2/5 text-center py-1.5 rounded-lg font-medium sm:w-1/4 ${selectedModel.available ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
-        {model.available ? 'Available' : 'Unavailable'}
-      </p></p>
+         <div className='flex flex-col gap-2'>
          <div className='grid grid-cols-2 gap-4 '> 
             <div>
                <label className='text-gray-600'>Gender</label>
@@ -60,11 +56,20 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
           </div>
           <div className='mt-6 flex gap-3'>
             <button
-              className="mt-auto w-full bg-white border border-gray-200 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+              className={`mt-auto w-full${selectedModel.available ? '' : ' opacity-50 cursor-not-allowed'} bg-black border  py-2 rounded-lg hover:bg-black/90 transition-colors flex items-center justify-center gap-2 text-white`}
               onClick={handleFavoriteClick}
+              disabled={!selectedModel.available}
             >
-              <FontAwesomeIcon icon={model.isFavorite ? icons.favoriteSolid : icons.favorite} />
-              {model.isFavorite ? 'Starred' : 'Add to Starlist'}
+              {selectedModel.available ? (
+                <>
+                  <FontAwesomeIcon
+                    icon={model.isFavorite ? icons.favoriteSolid : icons.favorite}
+                  />
+                  {model.isFavorite ? 'Starred' : 'Add to Starlist'}
+                </>
+              ) : (
+                'Unavailable'
+              )}
             </button>
           </div>
         </div>

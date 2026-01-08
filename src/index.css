@@ -20,3 +20,17 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+
+@keyframes filterSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.filter-panel-slide {
+  animation: filterSlideIn 220ms ease-out;
+  will-change: transform;
+}

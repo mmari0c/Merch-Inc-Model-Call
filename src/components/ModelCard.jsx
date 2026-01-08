@@ -13,7 +13,7 @@ function ModelCard({ model , onSelect, onFavoriteToggle}) {
 
   return (
     <div
-      className={`${model.available ? 'bg-white' : 'bg-gray-50'} p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow flex flex-col gap-3 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-violet-400`}
+      className={`flex flex-col gap-3 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-violet-400`}
       role="button"
       tabIndex={model.available ? 0 : -1}
       onClick={handleActivate}
