@@ -15,7 +15,7 @@ function StageStatus({
   const canControlFlow = typeof onAdvanceStage === 'function'
   const normalizedStatus = String(status || '').toLowerCase().replace(/\s+/g, '-')
   const showDesignerInstructions =
-    role === 'designer' &&
+    (role == 'designer' || role == 'model') &&
     (normalizedStatus === 'selection' || normalizedStatus === 'final-selection')
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false)
 
@@ -49,7 +49,7 @@ function StageStatus({
           >
             <button
               type="button"
-              className="flex items-center justify-center p-3 text-sand-700"
+              className="flex items-center justify-center p-3 text-black"
               onClick={handleInstructionsToggle}
               aria-label="View selection instructions"
             >
@@ -65,34 +65,50 @@ function StageStatus({
                 />
                 <div className="absolute right-0 top-12 z-20 w-72 rounded-lg border border-sand-100 bg-sand-50 p-4 text-sand-900 shadow-lg">
                   <p className="mb-2 font-medium">
-                    {normalizedStatus === 'selection'
+                    {role === 'model' ? 'What to Expect' :
+                       normalizedStatus === 'selection'
                       ? 'Selection Instructions'
-                      : 'Final Selection Instructions'}
+                      : 'Final Selection Instructions'
+                    }
                   </p>
-                  {normalizedStatus === 'selection' ? (
+                  {role === 'model' ? (
                     <ol className="list-decimal space-y-3 pl-5">
                       <li>
-                        <p><strong>Review and Star: </strong>Browse available models and click the star to add them to your Starlist. Open a model card to view full details.</p>
+                        <p><strong>Stay Updated: </strong>Keep an eye on your Starlist and final selection status as designers make their choices.</p>
                       </li>
                       <li>
-                        <p><strong>Wait for Your Turn: </strong>When it is your turn, move your Starlist picks into your final selection.</p>
+                        <p><strong>Be Ready: </strong>If selected, ensure your contact information is up-to-date for further communication.</p>
                       </li>
                       <li>
-                        <p><strong>Get Ready: </strong>Keep your Starlist updated so final selections are quick when the stage advances.</p>
+                        <p><strong>Keep Engaged: </strong>Continue to update your profile and stay active in the community for better visibility.</p>
                       </li>
                     </ol>
                   ) : (
-                    <ol className="list-decimal space-y-3 pl-5">
-                      <li>
-                        <p><strong>Select from Starlist: </strong>Choose your final models from the Starlist panel.</p>
-                      </li>
-                      <li>
-                        <p><strong>Review Choices: </strong>Double-check model details before confirming your lineup.</p>
-                      </li>
-                      <li>
-                        <p><strong>Submit Final Selection: </strong>Click "Submit Final Selection" to lock in your choices.</p>
-                      </li>
-                    </ol>
+                    normalizedStatus === 'selection' ? (
+                      <ol className="list-decimal space-y-3 pl-5">
+                        <li>
+                          <p><strong>Review and Star: </strong>Browse available models and click the star to add them to your Starlist. Open a model card to view full details.</p>
+                        </li>
+                        <li>
+                          <p><strong>Wait for Your Turn: </strong>When it is your turn, move your Starlist picks into your final selection.</p>
+                        </li>
+                        <li>
+                          <p><strong>Get Ready: </strong>Keep your Starlist updated so final selections are quick when the stage advances.</p>
+                        </li>
+                      </ol>
+                    ) : (
+                      <ol className="list-decimal space-y-3 pl-5">
+                        <li>
+                          <p><strong>Select from Starlist: </strong>Choose your final models from the Starlist panel.</p>
+                        </li>
+                        <li>
+                          <p><strong>Review Choices: </strong>Double-check model details before confirming your lineup.</p>
+                        </li>
+                        <li>
+                          <p><strong>Submit Final Selection: </strong>Click "Submit Final Selection" to lock in your choices.</p>
+                        </li>
+                      </ol>
+                    )
                   )}
                 </div>
               </>
@@ -104,10 +120,10 @@ function StageStatus({
           <div className='flex flex-wrap items-center gap-3 border-t border-gray-100 pt-4 md:border-0 md:pt-0'>
             <button
               type="button"
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm transition-colors ${
+              className={`px-4 py-2 rounded-sm text-xs sm:text-sm transition-colors ${
                 isAdvanceDisabled
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-sand-600 text-white hover:bg-sand-700'
+                  : 'bg-black text-white hover:bg-black/80'
               }`}
               onClick={onAdvanceStage}
               disabled={isAdvanceDisabled}

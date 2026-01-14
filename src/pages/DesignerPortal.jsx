@@ -19,11 +19,11 @@ function DesignerPortal() {
   const [isStarlistOpen, setIsStarlistOpen] = useState(false)
 
   const models = [
-    { name: "Mario Nolasco", modelNumber: "M-001", isFavorite: true, isFinalSelection: false, available: true, gender: "male", ethnicity: "latino", height: "6'1\"", weight: "180 lbs", measurements: { chest: "40\"", waist: "32\"", hips: "38\""} },
-    { name: "Anna Smith", modelNumber: "M-002", isFavorite: false, isFinalSelection: false, available: true, gender: "female", ethnicity: "caucasian", height: "5'6\"", weight: "140 lbs", measurements: { bust: "34\"", waist: "26\"", hips: "36\"" }},
-    { name: "Liam Johnson", modelNumber: "M-003", isFavorite: true, isFinalSelection: false, available: false, gender: "male", ethnicity: "black", height: "5'10\"", weight: "170 lbs", measurements: { chest: "38\"", waist: "30\"", hips: "36\"" } },
-    { name: "Sophia Lee", modelNumber: "M-004", isFavorite: false, isFinalSelection: false, available: true, gender: "female", ethnicity: "asian", height: "5'4\"", weight: "120 lbs", measurements: { bust: "32\"", waist: "24\"", hips: "34\"" }},
-    { name: "Ethan Brown", modelNumber: "M-005", isFavorite: false, isFinalSelection: false, available: true, gender: "male", ethnicity: "caucasian", height: "6'0\"", weight: "190 lbs", measurements: { chest: "42\"", waist: "34\"", hips: "40\"" } },
+    { name: "Mario Nolasco", modelNumber: "M-001", isFavorite: true, isFinalSelection: false, available: true, gender: "male", ethnicity: "latino", height: "6'1\"", weight: "180 lbs", instagram: "mario.nolasco", measurements: { chest: "40\"", waist: "32\"", hips: "38\""} },
+    { name: "Anna Smith", modelNumber: "M-002", isFavorite: false, isFinalSelection: false, available: true, gender: "female", ethnicity: "caucasian", height: "5'6\"", weight: "140 lbs", instagram: "anna.smith", measurements: { bust: "34\"", waist: "26\"", hips: "36\"" }},
+    { name: "Liam Johnson", modelNumber: "M-003", isFavorite: true, isFinalSelection: false, available: false, gender: "male", ethnicity: "black", height: "5'10\"", weight: "170 lbs", instagram: "liam.johnson", measurements: { chest: "38\"", waist: "30\"", hips: "36\"" } },
+    { name: "Sophia Lee", modelNumber: "M-004", isFavorite: false, isFinalSelection: false, available: true, gender: "female", ethnicity: "asian", height: "5'4\"", weight: "120 lbs", instagram: "sophia.lee", measurements: { bust: "32\"", waist: "24\"", hips: "34\"" }},
+    { name: "Ethan Brown", modelNumber: "M-005", isFavorite: false, isFinalSelection: false, available: true, gender: "male", ethnicity: "caucasian", height: "6'0\"", weight: "190 lbs", instagram: "ethan.brown", measurements: { chest: "42\"", waist: "34\"", hips: "40\"" } },
   ]
 
   useEffect( () => {
@@ -143,7 +143,7 @@ function DesignerPortal() {
       <div className='flex flex-col w-full gap-6 mb-5 md:flex-row lg:items-start lg:gap-6 '>
 
         <div className='flex flex-col gap-3 md:gap-5 w-full  md:w-2/3 lg:w-3/4'>
-          <div className='sticky top-0 z-10 bg-white pt-2 pb-3 flex flex-col gap-4 md:static md:pt-0 md:pb-0 md:flex-none'>
+          <div className='sticky top-0 z-10 bg-white pt-2 pb-3 flex flex-col gap-4'>
             <div className='flex justify-between items-center gap-3 w-full'>
               <div className='w-full relative'>
                 <input
@@ -161,7 +161,13 @@ function DesignerPortal() {
                 onClick={() => setIsStarlistOpen(true)}
                 aria-label="Open starlist"
               >
-                <FontAwesomeIcon className={`text-xl ${favoriteModels.length > 0 ? 'text-amber-500' : 'text-black'}`} icon={icons.favorite} />
+                { favoriteModels.length > 0 ? (
+                  <FontAwesomeIcon className={`text-xl text-amber-500`} icon={icons.favoriteSolid} />
+
+                ) : (
+                  <FontAwesomeIcon className={`text-xl text-black`} icon={icons.favorite} />
+                )
+                }
                 <p>{favoriteModels.length}</p>
               </button>
             </div>

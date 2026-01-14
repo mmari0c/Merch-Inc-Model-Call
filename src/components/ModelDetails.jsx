@@ -5,6 +5,8 @@ import { icons } from '../icons.js'
 function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
 
    const [model, setModel] = useState(selectedModel)
+   const instagramHandle = model.instagram?.replace(/^@/, '')
+   const instagramUrl = instagramHandle ? `https://www.instagram.com/${instagramHandle}` : ''
 
    const handleFavoriteClick = (event) => {
     event.stopPropagation()
@@ -25,6 +27,21 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
           <div className='w-full h-80 bg-gray-100 rounded-xl mb-4' aria-hidden="true" />
 
          <div className='flex flex-col gap-2'>
+            <div className=''>
+               {instagramHandle ? (
+                  <a
+                    className='font-medium text-black inline-flex items-center hover:underline'
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FontAwesomeIcon icon={icons.instagram} className='text-2xl mr-2' style={{ width: 'auto' }} />
+                    @{instagramHandle}
+                  </a>
+               ) : (
+                  null
+               )}
+            </div>
          <div className='grid grid-cols-2 gap-4 '> 
             <div>
                <label className='text-gray-600'>Gender</label>
@@ -56,7 +73,7 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
           </div>
           <div className='mt-6 flex gap-3'>
             <button
-              className={`mt-auto w-full${selectedModel.available ? '' : ' opacity-50 cursor-not-allowed'} bg-black border  py-2 rounded-lg hover:bg-black/90 transition-colors flex items-center justify-center gap-2 text-white`}
+              className={`mt-auto w-full${selectedModel.available ? '' : ' opacity-50 cursor-not-allowed'} bg-black border  py-2 rounded-sm hover:bg-black/90 transition-colors flex items-center justify-center gap-2 text-white`}
               onClick={handleFavoriteClick}
               disabled={!selectedModel.available}
             >

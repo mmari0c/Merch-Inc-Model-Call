@@ -38,7 +38,7 @@ function ModelCard({ model , onSelect, onFavoriteToggle}) {
         >
           {model.available ? (
             <>
-              <FontAwesomeIcon className='text-white' icon={model.isFavorite ? icons.favoriteSolid : icons.favorite}/>
+              <FontAwesomeIcon className='text-white bg-gray-200 opacity-80' icon={model.isFavorite ? icons.favoriteSolid : icons.favorite}/>
             </>
           ) : (
             <>

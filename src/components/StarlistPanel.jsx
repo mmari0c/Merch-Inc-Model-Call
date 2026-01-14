@@ -12,7 +12,7 @@ function StarlistPanel({
 }) {
   return (
     <>
-      <div className='hidden sm:sticky md:top-6 md:flex md:flex-col md:gap-6 md:w-1/3 lg:w-1/4 lg:max-w-sm'>
+      <div className='hidden sm:sticky md:top-0 md:pt-2 md:flex md:flex-col md:gap-6 md:w-1/3 lg:w-1/4 lg:max-w-sm'>
         <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 h-fit md:top-6'>
           <p className='flex items-center gap-2'>
             Starlist{' '}

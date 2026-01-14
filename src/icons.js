@@ -1,6 +1,7 @@
 import { faClock, faStar, faMessage, faPaperPlane} from '@fortawesome/free-regular-svg-icons'
 import { faStar as faStarSolid, faCircleInfo, faPencil, faFilter, faCheck, faEnvelope, faPhone, faX, faPlus, faMagnifyingGlass, faCaretDown, faSliders, faAngleDown, faAngleUp
 } from '@fortawesome/free-solid-svg-icons'
+import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
 export const icons = {
   stageStatus: faClock,
@@ -19,6 +20,6 @@ export const icons = {
   search: faMagnifyingGlass,
   caretDown: faAngleDown,
   sliders: faSliders,
-  caretUp: faAngleUp
+  caretUp: faAngleUp,
+  instagram: faInstagram
 }
-

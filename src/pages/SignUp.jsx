@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/merch-logo.png'
+import logo from '../assets/merch-inc-logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icons } from '../icons.js'
 
@@ -57,14 +57,14 @@ function SignUp() {
                   <p className='text-gray-500'>Register as a model or designer to get started.</p>
                </div>
                <form onSubmit={handleSignUp} className="bg-white border-2 border-gray-200 p-5 rounded-lg flex flex-col gap-4 w-full">
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 ">
                      <label htmlFor="role" className="font-medium">I am a...</label>
                      <select
                         id="role"
                         name="role"
                         value={formData.role}
                         onChange={handleChange}
-                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-sand-400"
+                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
                      >
                         <option value="model">Model</option>
                         <option value="designer">Designer</option>
@@ -78,7 +78,7 @@ function SignUp() {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
-                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-sand-400"
+                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
                      />
                   </div>
 
@@ -90,7 +90,7 @@ function SignUp() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-sand-400"
+                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
                      />
                   </div>
 
@@ -102,7 +102,7 @@ function SignUp() {
                         name="phoneNumber"
                         value={formData.phoneNumber}
                         onChange={handleChange}
-                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-sand-400"
+                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
                      />
                   </div>
                   {status.message ? (
@@ -116,12 +116,12 @@ function SignUp() {
                         {status.message}
                      </p>
                   ) : null}
-                  <button className="bg-sand-600 text-white p-3 rounded-lg font-medium hover:bg-sand-700 transition-colors" type="submit">Join Model Call</button>
+                  <button className="bg-black text-white p-3 rounded-sm font-medium hover:opacity-80 transition-colors" type="submit">Join Model Call</button>
                </form>
             </div>
          </div>
          <div className={`${status.type === 'success' ? 'block' : 'hidden'} max-w-sm w-full bg-white p-8 rounded-xl border-2 border-gray-200 flex flex-col items-center justify-center gap-4 h-fit mt-6 `}>
-            <FontAwesomeIcon className='bg-gray-200 p-5 text-lg rounded-full' icon={icons.check}/>
+            <FontAwesomeIcon className='bg-sand-200 p-5 text-lg rounded-full' icon={icons.check}/>
             <p>Welcome {submittedData?.fullName}!</p>
             <p className='text-gray-500'>You've successfully registered as a {submittedData?.role}.</p>
             { submittedData?.role === 'model' && (
@@ -132,13 +132,13 @@ function SignUp() {
             )}
             <div className='w-full flex flex-col gap-2 items-center text-center border-t border-gray-200 pt-4'>
                <p>{submittedData?.role === 'model' ? 'Complete your profile for better chances of getting picked!' : 'Head over to the Designer Portal to start viewing models!'}</p>
-               <Link
+            </div>
+            <Link
                   to={submittedData?.role === 'model' ? `/profile/${slugify(submittedData?.fullName || '')}` : '/designer-portal'}
-                  className="w-full bg-sand-500 p-3 rounded-lg text-center"
+                  className="w-full bg-black p-3 rounded-sm text-white text-center"
                >
                   {submittedData?.role === 'model' ? 'Complete Profile' : 'Go to Designer Portal'}
-               </Link>
-            </div>
+            </Link>
          </div>
       </div>
    )

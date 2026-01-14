@@ -2,7 +2,6 @@ import { useState } from 'react'
 import StageStatus from '../components/StageStatus.jsx'
 import DesignerOrder from '../components/DesignerOrder.jsx'
 import Stats from '../components/Stats.jsx'
-import { data } from 'react-router'
 
 const CAMPAIGN_STAGES = [
   {
@@ -48,6 +47,7 @@ const STATS = [
 
 function AdminPortal() {
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const currentStage = CAMPAIGN_STAGES[currentStageIndex]
   const nextStage = CAMPAIGN_STAGES[currentStageIndex + 1]
 
@@ -56,16 +56,28 @@ function AdminPortal() {
       setCurrentStageIndex((prev) => Math.min(prev + 1, CAMPAIGN_STAGES.length - 1))
     }
   }
+  const handleAdvanceRequest = () => {
+    if (nextStage) {
+      setIsConfirmOpen(true)
+    }
+  }
+  const handleConfirmAdvance = () => {
+    setIsConfirmOpen(false)
+    handleAdvanceStage()
+  }
+  const handleCloseConfirm = () => {
+    setIsConfirmOpen(false)
+  }
 
   return (
-    <section className="portal admin-portal flex flex-col items-center justify-center w-[90%] max-w-5xl mx-auto gap-6 text-sm">
+    <section className="portal admin-portal flex flex-col items-center justify-center w-[90%] max-w-6xl mx-auto gap-6 text-sm">
       <div className='w-full mt-5'>
         <StageStatus
           label="Current Stage"
           status={currentStage.label}
           description={currentStage.description}
           role="admin"
-          onAdvanceStage={handleAdvanceStage}
+          onAdvanceStage={handleAdvanceRequest}
           nextStageLabel={nextStage ? nextStage.label : 'Campaign Complete'}
           actionLabel={nextStage ? `Next: ${nextStage?.label}` : 'All Stages Complete'}
           isAdvanceDisabled={!nextStage}
@@ -103,7 +115,44 @@ function AdminPortal() {
         />
       ))}
     </div>
-      
+
+    {isConfirmOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center text-sm">
+        <button
+          type="button"
+          className="absolute inset-0 bg-black/40"
+          aria-label="Close confirmation"
+          onClick={handleCloseConfirm}
+        />
+        <div
+          className="relative w-[90%] max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-title"
+        >
+          <h3 id="confirm-title" className="text-base font-semibold">Confirm Stage Change</h3>
+          <p className="mt-2 text-gray-600">
+            Are you sure you want to advance to <strong>{nextStage?.label}</strong>? This action will affect all active users and cannot be undone.
+          </p>
+          <div className="mt-6 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
+              onClick={handleCloseConfirm}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-sm bg-black text-white hover:bg-black/80"
+              onClick={handleConfirmAdvance}
+            >
+              Advance to {nextStage?.label}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
     </section>
   )
 }

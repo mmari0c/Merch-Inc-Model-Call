@@ -12,6 +12,7 @@ function Profile() {
       email: 'marionolasco@gmail.com',
       phone: '469-555-1234',
       available: false,
+      instagram: 'mmari0c'
    }
 
    const photoSlots = Array.from({ length: 6 })
@@ -29,15 +30,7 @@ function Profile() {
                      <p className='text-gray-500'>Model Number: <span className='font-medium text-gray-700'>{profile.modelNumber}</span></p>
                   </div>
                </div>
-               <div className='flex flex-col items-center gap-1 text-gray-500 md:items-center'>
-                  <p><FontAwesomeIcon icon={icons.envelope} className="mr-1" /><span className='text-gray-700 font-medium'>{profile.email}</span></p>
-                  <p><FontAwesomeIcon icon={icons.phone} className="mr-1" /><span className='text-gray-700 font-medium'>{profile.phone}</span></p>
-               </div>
-               <div className="">
-                  <p className={`w-full text-center p-2 rounded-lg font-medium ${profile.available ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
-                  {profile.available ? 'Available' : 'Unavailable'}
-                  </p>
-               </div>
+
 
             </div>
 
@@ -52,28 +45,32 @@ function Profile() {
                   <div className='grid gap-4 sm:grid-cols-2'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="name" className='font-medium'>Full Name</label>
-                        <input type="text" id="name" defaultValue={profile.name} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="text" id="name" defaultValue={profile.name} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="email" className='font-medium'>Email Address</label>
-                        <input type="email" id="email" defaultValue={profile.email} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="email" id="email" defaultValue={profile.email} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="phone" className='font-medium'>Phone Number</label>
-                        <input type="text" id="phone" defaultValue={profile.phone} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="text" id="phone" defaultValue={profile.phone} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                     </div>
+                     <div className='flex flex-col gap-1'>
+                        <label htmlFor="instagram" className='font-medium'>Instagram</label>
+                        <input type="text" id="instagram" defaultValue={profile.instagram} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="gender" className='font-medium'>Gender</label>
-                        <select id="gender" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400'>
+                        <select id="gender" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
                            <option value="male">Male</option>
                            <option value="female">Female</option>
                            <option value="non-binary">Non-binary</option>
                            <option value="other">Other</option>
                         </select>
                      </div>
-                     <div className='flex flex-col gap-1 sm:col-span-2'>
+                     <div className='flex flex-col gap-1'>
                         <label htmlFor="ethnicity" className='font-medium'>Ethnicity</label>
-                        <select id="ethnicity" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400'>
+                        <select id="ethnicity" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
                            <option value="latino">Hispanic/Latino</option>
                            <option value="black">Black</option>
                            <option value="white">White</option>
@@ -84,6 +81,7 @@ function Profile() {
                            <option value="other">Other</option>
                         </select>
                      </div>
+
                   </div>
                </div>
 
@@ -112,15 +110,15 @@ function Profile() {
                   <div className='grid gap-4 sm:grid-cols-3'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="height" className='font-medium'>Height</label>
-                        <input type="text" id="height" placeholder="5'8 or 173cm" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="text" id="height" placeholder="5'8 or 173cm" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="weight" className='font-medium'>Weight</label>
-                        <input type="text" id="weight" placeholder="150 lbs or 68 kg" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="text" id="weight" placeholder="150 lbs or 68 kg" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="body" className='font-medium'>Body Measurements</label>
-                        <input type="text" id="body" placeholder="38-24-36" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-violet-400' />
+                        <input type="text" id="body" placeholder="38-24-36" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                   </div>
                </div>

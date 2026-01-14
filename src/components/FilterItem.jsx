@@ -5,7 +5,7 @@ function FilterItem({ handleSummaryClick, filterTitle, filterOptions, filter, on
    return (
       <details className='group md:relative' data-filter-dropdown>
          <summary
-              className='cursor-pointer list-none px-3 py-2 text-gray-700 w-full flex items-center justify-between border-b border-gray-200 md:rounded-xl md:bg-gray-100 md:border-none md:gap-2'
+              className='cursor-pointer list-none px-3 py-2 text-gray-700 w-full flex items-center justify-between border-b border-gray-200 md:rounded-lg md:bg-white md:border md:border-black md:gap-2'
               onPointerDown={handleSummaryClick}
             >
               {filterTitle}{' '}

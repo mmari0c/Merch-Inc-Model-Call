@@ -38,7 +38,7 @@ function ModelPortal() {
           {/* PLACEHOLDER INFORMATION */}
           <h1 className="text-xl font-light">{model.name}</h1>
           <p>Model Number: </p>
-          <div className='bg-white p-6 rounded-lg border-4 border-gray-200 w-full text-center text-4xl font-medium'>
+          <div className='bg-white p-6 rounded-lg border-2 border-dashed border-black w-full text-center text-4xl font-medium'>
             <h2>{model.modelNumber}</h2>
           </div>
 
@@ -56,25 +56,43 @@ function ModelPortal() {
             )}
           </div>
 
-          <button
+                  <div className='flex flex-col gap-2 border-t pt-4 border-t-gray-200'>
+         <div className='grid grid-cols-2 gap-4 '> 
+            <div>
+               <label className='text-gray-600'>Gender</label>
+               <p className='font-medium'>Male</p>
+            </div>
+            <div>
+               <label className='text-gray-600'>Ethnicity</label>
+               <p className='font-medium'>Hispanic/Latino</p>
+            </div>
+            <div>
+               <label className='text-gray-600'>Height</label>
+               <p className='font-medium'>5'8"</p>
+            </div>
+            <div>
+               <label className='text-gray-600'>Weight</label>
+               <p className='font-medium'>160 lbs</p>
+            </div>
+            <div>
+               <label className='text-gray-600'>Measurements</label>
+               <p className='font-medium'> 
+                  Bust: 36"
+                  Chest: 38"
+                  Waist: 28"
+                  Hips: 40"
+               </p>
+            </div>
+            
+         </div>
+         </div>
+            <button
             type="button"
-            className='w-full py-2 rounded-lg font-medium border border-gray-200 hover:bg-gray-100 transition-colors flex items-center justify-center gap-2'
+            className='w-full py-2 rounded-sm font-medium bg-black text-white hover:opacity-80 transition-colors flex items-center justify-center gap-2'
           >
             <FontAwesomeIcon icon={icons.pencil} />
             Edit Profile
-          </button>
-
-          <div className='text-gray-400 text-left w-full flex items-start gap-2 text-md border-t border-gray-200 pt-4'>
-            <FontAwesomeIcon className='' icon={icons.info} />
-            <div>
-              <p className='font-medium'>What to expect:</p>
-              <ul className='list-inside list-disc space-y-1 text-xs'>
-                <li>Stay available during the selection stage</li>
-                <li>You'll be notified if selected by a designer</li>
-                <li>Keep your profile information up to date</li>
-              </ul>
-            </div>
-          </div>
+          </button> 
         </div>
       </div>
 
