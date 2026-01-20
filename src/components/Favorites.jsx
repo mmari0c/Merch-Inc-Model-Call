@@ -12,7 +12,7 @@ function Favorites({ index, name, modelNumber, isFinalSelection, finalSelectionT
                <span className="text-gray-500">#{modelNumber}</span>
             </div>
          </div>
-         <button className={`${isFinalSelection ? 'bg-black text-white hover:bg-gray-700' : 'bg-white border border-black hover:bg-gray-100'} py-2 px-4 rounded-lg  transition-colors md:w-full lg:w-auto`} onClick={finalSelectionToggle}>
+         <button className={`${isFinalSelection ? 'bg-black text-white hover:bg-gray-700' : 'bg-white border border-gray-300 hover:bg-gray-100'} py-2 px-4 rounded-lg  transition-colors md:w-full lg:w-auto`} onClick={finalSelectionToggle}>
             <FontAwesomeIcon className='text-[0.7rem]' icon={isFinalSelection ? icons.check : icons.plus} />
          </button>
       </div>

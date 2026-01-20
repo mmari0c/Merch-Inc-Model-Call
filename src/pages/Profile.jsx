@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useParams } from 'react-router-dom'
+import { redirect, useParams } from 'react-router-dom'
 import { icons } from '../icons.js'
 import { useEffect, useRef, useState } from 'react'
 
@@ -19,12 +19,15 @@ function Profile() {
       height: null,
       weight: null,
       body: null,
+      profileStatus: 'active', // 'active' or 'incomplete'
    }
 
 
 
    const [userInfo, setUserInfo] = useState(profile)
    const [photos, setPhotos] = useState([])
+   const [fieldErrors, setFieldErrors] = useState({})
+   const [photoError, setPhotoError] = useState('')
    const fileInputRef = useRef(null)
    const photosRef = useRef([])
    const photoSlots = Array.from({ length: 6 })
@@ -32,6 +35,9 @@ function Profile() {
    const handleChange = (event) => {
       const { name, value } = event.target
       setUserInfo((prev) => ({ ...prev, [name]: value }))
+      if (fieldErrors[name]) {
+         setFieldErrors((prev) => ({ ...prev, [name]: '' }))
+      }
       console.log(userInfo)
    }
 
@@ -47,6 +53,7 @@ function Profile() {
          }))
          return [...prev, ...nextPhotos]
       })
+      if (photoError) setPhotoError('')
 
       event.target.value = ''
    }
@@ -67,6 +74,28 @@ function Profile() {
       fileInputRef.current?.click()
    }
 
+   const handleSubmit = (event) => {
+      event.preventDefault()
+      const requiredFields = ['name', 'email', 'phone', 'gender', 'ethnicity', 'height']
+      const nextFieldErrors = requiredFields.reduce((acc, field) => {
+         const value = userInfo[field]
+         if (!value || String(value).trim() === '') {
+            acc[field] = 'This field is required.'
+         }
+         return acc
+      }, {})
+
+      setFieldErrors(nextFieldErrors)
+      setPhotoError(photos.length < 1 ? 'Add at least 1 photo.' : '')
+
+      if (Object.keys(nextFieldErrors).length || photos.length < 1) {
+         return
+      }
+      // Submit updated profile to Supabase here
+      console.log('Profile submitted:', userInfo, photos)
+      window.location.href = '/model/mario'
+   }
+
    useEffect(() => {
       photosRef.current = photos
    }, [photos])
@@ -81,7 +110,7 @@ function Profile() {
       <section className="profile-page flex items-center justify-center min-h-screen px-6 py-12 text-xs sm:text-sm">
          <div className="w-full max-w-2xl flex flex-col items-center justify-center gap-8">
             {/* If account is being created, it says "Create Profile", otherwise "Edit Profile" */}
-            <p className='text-xl font-semibold text-left w-full max-w-3xl border-b border-gray-200 pb-3 '>Edit Profile</p>
+            <p className='text-xl font-semibold text-left w-full max-w-3xl border-b border-gray-200 pb-3 '>{profile.profileStatus === 'active' ? 'Edit Profile' : 'Complete Profile'}</p>
 
             <div className='md:max-w-2xl w-full'>
 
@@ -94,34 +123,84 @@ function Profile() {
                   <div className='grid gap-4 sm:grid-cols-2'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="name" className='font-medium'>Full Name</label>
-                        <input type="text" id="name" name="name" defaultValue={userInfo.name} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input
+                           type="text"
+                           id="name"
+                           name="name"
+                           defaultValue={userInfo.name}
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.name ? 'border border-red-500' : ''}`}
+                           required
+                        />
+                        {fieldErrors.name ? (
+                           <p className="text-xs text-red-600">{fieldErrors.name}</p>
+                        ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="email" className='font-medium'>Email Address</label>
-                        <input type="email" id="email" name="email" defaultValue={userInfo.email} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input
+                           type="email"
+                           id="email"
+                           name="email"
+                           defaultValue={userInfo.email}
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                           required
+                        />
+                        {fieldErrors.email ? (
+                           <p className="text-xs text-red-600">{fieldErrors.email}</p>
+                        ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="phone" className='font-medium'>Phone Number</label>
-                        <input type="text" id="phone" name="phone" defaultValue={userInfo.phone} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input
+                           type="text"
+                           id="phone"
+                           name="phone"
+                           defaultValue={userInfo.phone}
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.phone ? 'border border-red-500' : ''}`}
+                           required
+                        />
+                        {fieldErrors.phone ? (
+                           <p className="text-xs text-red-600">{fieldErrors.phone}</p>
+                        ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="instagram" className='font-medium'>Instagram</label>
+                        <label htmlFor="instagram" className='font-medium'>Instagram <span className='text-gray-400'>(Optional)</span></label>
                         <input type="text" id="instagram" name="instagram" defaultValue={userInfo.instagram} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="gender" className='font-medium'>Gender</label>
-                        <select id="gender" name="gender" defaultValue={userInfo.gender} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
-                           <option value="" disabled selected hidden>Select One</option>
+                        <select
+                           id="gender"
+                           name="gender"
+                           defaultValue={userInfo.gender}
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.gender ? 'border border-red-500' : ''}`}
+                           required
+                        >
+                           <option value="" disabled hidden>Select One</option>
                            <option value="male">Male</option>
                            <option value="female">Female</option>
                            <option value="non-binary">Non-binary</option>
                            <option value="other">Other</option>
                         </select>
+                        {fieldErrors.gender ? (
+                           <p className="text-xs text-red-600">{fieldErrors.gender}</p>
+                        ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="ethnicity" className='font-medium'>Ethnicity</label>
-                        <select id="ethnicity" name="ethnicity" defaultValue={userInfo.ethnicity} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
-                           <option value="" disabled selected hidden>Select One</option>
+                        <select
+                           id="ethnicity"
+                           name="ethnicity"
+                           defaultValue={userInfo.ethnicity}
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.ethnicity ? 'border border-red-500' : ''}`}
+                           required
+                        >
+                           <option value="" disabled hidden>Select One</option>
                            <option value="latino">Hispanic/Latino</option>
                            <option value="black">Black</option>
                            <option value="white">White</option>
@@ -131,6 +210,9 @@ function Profile() {
                            <option value="pacific islander">Pacific Islander</option>
                            <option value="other">Other</option>
                         </select>
+                        {fieldErrors.ethnicity ? (
+                           <p className="text-xs text-red-600">{fieldErrors.ethnicity}</p>
+                        ) : null}
                      </div>
 
                   </div>
@@ -195,24 +277,37 @@ function Profile() {
                         )
                      ))}
                   </div>
-                  <p className="text-xs text-gray-500">{photos.length}/6 photos uploaded</p>
+                  {photoError ? (
+                     <p className="text-xs text-red-600">{photoError}</p>
+                  ) : null}
                </div>
 
                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
                   <div>
-                     <h3 className='text-base font-semibold'>Physical Measurements <span className='text-gray-400'>(Optional)</span></h3>
+                     <h3 className='text-base font-semibold'>Physical Measurements</h3>
                   </div>
                   <div className='grid gap-4 sm:grid-cols-3'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="height" className='font-medium'>Height</label>
-                        <input type="text" id="height" name='height' placeholder="5'8 or 173cm" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input
+                           type="text"
+                           id="height"
+                           name='height'
+                           placeholder="5'8 or 173cm"
+                           onChange={handleChange}
+                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.height ? 'border border-red-500' : ''}`}
+                           required
+                        />
+                        {fieldErrors.height ? (
+                           <p className="text-xs text-red-600">{fieldErrors.height}</p>
+                        ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="weight" className='font-medium'>Weight</label>
+                        <label htmlFor="weight" className='font-medium'>Weight <span className='text-gray-400'>(Optional)</span></label>
                         <input type="text" id="weight" name='weight' placeholder="150 lbs or 68 kg" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="body" className='font-medium'>Body Measurements</label>
+                        <label htmlFor="body" className='font-medium'>Body Measurements <span className='text-gray-400'>(Optional)</span></label>
                         <input type="text" id="body" name='body' placeholder="38-24-36" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                   </div>
@@ -220,9 +315,11 @@ function Profile() {
             </div>
             
             {/* SUBMIT CHANGES TO SUPABASE AND REROUTE TO MODEL PAGE */}
-            <div className='flex justify-end mt-4'>
-                  <button type="button" className='mr-4 px-6 py-3 font-medium rounded-sm hover:opacity-75 border transition-colors'>Cancel</button>
-                  <button type="button" className='bg-black text-white px-6 py-3 rounded-sm font-medium hover:opacity-75 transition-colors'>Save</button>
+            <div className='mt-4 w-full flex gap-4 sm:justify-end sm:gap-2'>
+               { profile.profileStatus === 'active' && (
+                     <button type="button" onClick={() => window.history.back()} className='bg-white border w-full rounded-md border-gray-500 p-5 cursor-pointer hover:opacity-60 sm:w-fit sm:p-3'>Cancel</button>
+               )}
+               <button type="button" className='bg-black border w-full rounded-md text-white p-5 cursor-pointer hover:opacity-60 sm:w-fit sm:p-3' onClick={handleSubmit}>{profile.profileStatus === 'active' ? 'Save' : 'Complete Profile'}</button>
             </div>
 
             </div>

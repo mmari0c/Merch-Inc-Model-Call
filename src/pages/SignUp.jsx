@@ -52,7 +52,7 @@ function SignUp() {
                <img src={logo} alt="Merch Inc Logo" className="w-30 md:w-70 lg:w-90 h-auto" />
             </div>
             <div className='w-full md:w-1/2 flex flex-col gap-5'>
-               <div className='text-center md:text-left'>
+               <div className='text-center'>
                   <h1 className='text-xl font-semibold'>Model Call Sign Up</h1>
                   <p className='text-gray-500'>Register as a model or designer to get started.</p>
                </div>
@@ -71,7 +71,7 @@ function SignUp() {
                      </select>
                   </div>
                   <div className="flex flex-col gap-1">
-                     <label htmlFor="fullName" className="font-medium">Full Name</label>
+                     <label htmlFor="fullName" className="font-medium"></label>
                      <input
                         type="text"
                         id="fullName"
@@ -79,11 +79,12 @@ function SignUp() {
                         value={formData.fullName}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                        placeholder='Full Name'
                      />
                   </div>
 
                   <div className="flex flex-col gap-1">
-                     <label htmlFor="email" className="font-medium">Email Address</label>
+                     <label htmlFor="email" className="font-medium"></label>
                      <input
                         type="email"
                         id="email"
@@ -91,11 +92,12 @@ function SignUp() {
                         value={formData.email}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                        placeholder='Email Address'
                      />
-                  </div>
+                     </div>
 
-                  <div className="flex flex-col gap-1">
-                     <label htmlFor="phoneNumber" className="font-medium">Phone Number</label>
+                     <div className="flex flex-col gap-1">
+                        <label htmlFor="phoneNumber" className="font-medium"></label>
                      <input
                         type="text"
                         id="phoneNumber"
@@ -103,6 +105,7 @@ function SignUp() {
                         value={formData.phoneNumber}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                        placeholder='Phone Number'
                      />
                   </div>
                   {status.message ? (
@@ -124,17 +127,12 @@ function SignUp() {
             <FontAwesomeIcon className='bg-sand-200 p-5 text-lg rounded-full' icon={icons.check}/>
             <p>Welcome {submittedData?.fullName}!</p>
             <p className='text-gray-500'>You've successfully registered as a {submittedData?.role}.</p>
-            { submittedData?.role === 'model' && (
-               <div className='w-full flex flex-col gap-2 items-center text-center'>
-                  <p>Your assigned number:</p>
-                  <p className='border border-dashed p-6 rounded-md w-full text-center'><strong>M-001</strong></p>
-               </div>
-            )}
             <div className='w-full flex flex-col gap-2 items-center text-center border-t border-gray-200 pt-4'>
-               <p>{submittedData?.role === 'model' ? 'Complete your profile for better chances of getting picked!' : 'Head over to the Designer Portal to start viewing models!'}</p>
+               <p>{submittedData?.role === 'model' ? 'Complete your profile for a better chances of getting picked!' : 'Head over to the Designer Portal to start viewing models!'}</p>
             </div>
             <Link
                   to={submittedData?.role === 'model' ? `/profile/${slugify(submittedData?.fullName || '')}` : '/designer-portal'}
+                  state={submittedData?.role === 'model' ? {submittedData} : null}
                   className="w-full bg-black p-3 rounded-sm text-white text-center"
                >
                   {submittedData?.role === 'model' ? 'Complete Profile' : 'Go to Designer Portal'}

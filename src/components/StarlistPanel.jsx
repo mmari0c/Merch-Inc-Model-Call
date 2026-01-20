@@ -21,7 +21,7 @@ function StarlistPanel({
   const hasQueuePanel = stageStatus === 'Final Selection' && positionInQueue >= 0
   const remaining = 0
   const isMyTurn = hasQueuePanel && remaining <= 0
-  const submitLabel = 'Submit final selection'
+  const submitLabel = 'Submit Final Selection'
 
   const submitFinalSelection = () => {
     navigate('/confirmation/designer', { state: { participants: finalSelection } })

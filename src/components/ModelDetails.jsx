@@ -36,7 +36,6 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
                     rel="noreferrer"
                   >
                     <FontAwesomeIcon icon={icons.instagram} className='text-2xl mr-2' style={{ width: 'auto' }} />
-                    @{instagramHandle}
                   </a>
                ) : (
                   null
