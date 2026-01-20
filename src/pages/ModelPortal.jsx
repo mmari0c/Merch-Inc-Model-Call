@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import StageStatus from '../components/StageStatus.jsx'
 import { icons } from '../icons.js'
+import { useNavigate } from 'react-router-dom'
 import MatchScreen from '../components/MatchScreen.jsx'
 
 function ModelPortal() {
+
+  const navigate = useNavigate()
 
   const model = {
     name: "Mario Nolasco",
@@ -13,16 +16,15 @@ function ModelPortal() {
       { name: "Photoshoots", status: "upcoming", description: "Models are participating in photoshoots" },
     ],
     modelNumber: "M-001",
-    favorites: [
-      { designer: "Designer A", isFavorite: true },
-      { designer: "Designer B", isFavorite: false },
-    ]
+    favorites: [ "Designer A", "Designer B" ],
+    isSelected: false,
   }
 
-  const TEST_DESIGNERS = [
-    { name: 'Designer A', contact: 4695551234 },
-    { name: 'Designer B', contact: 4695555678 },
-  ]
+  const TEST_DESIGNER = { name: 'Designer A', contact: 4695551234 }
+
+  if (model.isSelected) {
+    navigate('/confirmation/model', { state: { participants: TEST_DESIGNER } })
+  }
 
   return (
     <section className="portal model-portal flex items-center justify-center min-h-screen text-xs sm:text-sm">

@@ -1,5 +1,5 @@
-import { faClock, faStar, faMessage, faPaperPlane} from '@fortawesome/free-regular-svg-icons'
-import { faStar as faStarSolid, faCircleInfo, faPencil, faFilter, faCheck, faEnvelope, faPhone, faX, faPlus, faMagnifyingGlass, faCaretDown, faSliders, faAngleDown, faAngleUp
+import { faClock, faStar, faMessage, faPaperPlane, faCamera} from '@fortawesome/free-regular-svg-icons'
+import { faStar as faStarSolid, faCircleInfo, faPencil, faFilter, faCheck, faEnvelope, faPhone, faX, faPlus, faMagnifyingGlass, faCaretDown, faSliders, faAngleDown, faAngleUp, faDownload
 } from '@fortawesome/free-solid-svg-icons'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
@@ -21,5 +21,7 @@ export const icons = {
   caretDown: faAngleDown,
   sliders: faSliders,
   caretUp: faAngleUp,
-  instagram: faInstagram
+  instagram: faInstagram,
+  camera: faCamera,
+  download: faDownload,
 }

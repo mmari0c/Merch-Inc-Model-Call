@@ -10,7 +10,7 @@ function MatchItem({name, phone}) {
          </div>
          <div className='bg-white border-2 border-gray-200 p-4 rounded-lg flex items-center justify-center gap-3 cursor-pointer hover:bg-gray-100 transition-colors w-full'>
             <FontAwesomeIcon className='text-lg' icon={icons.message} />
-            <p>Contact <span>{name}</span></p>
+            <a href={`sms:${phone}`}>Message <span>{name}</span></a>
          </div>
       </div>
    )

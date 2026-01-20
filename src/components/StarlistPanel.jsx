@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icons } from '../icons.js'
 import Favorites from './Favorites.jsx'
 import FinalSelection from './FinalSelection.jsx'
+import { useNavigate } from 'react-router-dom'
 
 function StarlistPanel({
   favoriteModels,
@@ -9,10 +10,40 @@ function StarlistPanel({
   onSelectionToggle,
   isStarlistOpen,
   onCloseStarlist,
+  stageStatus,
+  queue,
+  profileName,
+  currentInQueue,
 }) {
+  const navigate = useNavigate()
+  const positionInQueue = Array.isArray(queue) ? queue.indexOf(profileName) : -1
+  const currentPosition = Number.isInteger(currentInQueue) ? currentInQueue : 0
+  const hasQueuePanel = stageStatus === 'Final Selection' && positionInQueue >= 0
+  const remaining = 0
+  const isMyTurn = hasQueuePanel && remaining <= 0
+  const submitLabel = 'Submit final selection'
+
+  const submitFinalSelection = () => {
+    navigate('/confirmation/designer', { state: { participants: finalSelection } })
+  }
+
   return (
     <>
-      <div className='hidden sm:sticky md:top-0 md:pt-2 md:flex md:flex-col md:gap-6 md:w-1/3 lg:w-1/4 lg:max-w-sm'>
+      <div className='hidden sm:sticky md:top-0 md:pt-2 md:flex md:flex-col md:gap-6 w-full'>
+        {hasQueuePanel && (
+          <div className='bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-2 h-fit items-center text-center'>
+            {isMyTurn ? (
+              <p className='font-medium text-sand-700'>
+                It’s your turn to select!
+              </p>
+            ) : (
+              <p className='flex items-center gap-2'>
+                <strong className='text-xl text-sand-600'>{remaining}</strong>
+                designers ahead of you
+              </p>
+            )}
+          </div>
+        )}
         <div className='w-full bg-white p-6 rounded-xl border border-gray-200 flex flex-col gap-4 h-fit md:top-6'>
           <p className='flex items-center gap-2'>
             Starlist{' '}
@@ -48,9 +79,13 @@ function StarlistPanel({
                 finalSelectionToggle={() => onSelectionToggle(fav.modelNumber)}
               />
             ))}
-            <button className='rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors'>
+            <button
+              className='rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors disabled:cursor-not-allowed disabled:bg-gray-300'
+              disabled={!isMyTurn}
+              onClick={submitFinalSelection}
+            >
               <FontAwesomeIcon className='text-lg' icon={icons.paperPlane} />
-              Submit Final Selection
+              {submitLabel}
             </button>
           </div>
         )}
@@ -64,7 +99,7 @@ function StarlistPanel({
             aria-label='Close starlist'
             onClick={onCloseStarlist}
           />
-          <div className='absolute right-0 top-0 h-full w-[78%] max-w-[18rem] bg-white p-5 shadow-xl overflow-y-auto'>
+          <div className='absolute right-0 top-0 h-full w-[78%] max-w-[18rem] bg-white p-5 shadow-xl overflow-y-auto flex flex-col'>
             <div className='flex items-center justify-between mb-4'>
               <p className='flex items-center gap-2'>
                 Starlist{' '}
@@ -106,10 +141,30 @@ function StarlistPanel({
                     finalSelectionToggle={() => onSelectionToggle(fav.modelNumber)}
                   />
                 ))}
-                <button className='w-full rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors mt-4'>
+                <button
+                  className='w-full rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-black/90 transition-colors disabled:cursor-not-allowed disabled:opacity-50 mt-4'
+                  disabled={!isMyTurn}
+                  onClick={submitFinalSelection}
+                >
                   <FontAwesomeIcon className='text-lg' icon={icons.paperPlane} />
-                  Submit Final Selection
+                  {submitLabel}
                 </button>
+              </div>
+            )}
+            {hasQueuePanel && (
+              <div className='mt-auto pt-8'>
+                <div className='rounded-xl border border-gray-200 bg-white p-4 text-center'>
+                {isMyTurn ? (
+                  <p className='font-medium text-sand-700'>
+                    It’s your turn to select!
+                  </p>
+                ) : (
+                  <p className='flex items-center justify-center gap-2'>
+                    <strong className='text-lg text-sand-600'>{remaining}</strong>
+                    designers ahead of you
+                  </p>
+                )}
+                </div>
               </div>
             )}
           </div>

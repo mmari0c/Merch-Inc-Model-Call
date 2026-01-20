@@ -26,6 +26,16 @@ function DesignerPortal() {
     { name: "Ethan Brown", modelNumber: "M-005", isFavorite: false, isFinalSelection: false, available: true, gender: "male", ethnicity: "caucasian", height: "6'0\"", weight: "190 lbs", instagram: "ethan.brown", measurements: { chest: "42\"", waist: "34\"", hips: "40\"" } },
   ]
 
+  const profile = {
+    name: "Mario"
+  }
+
+  const stageStatus = "Final Selection"
+
+  const queue = [ "Jose", "Anna", "Luis", "Mario", "Carlos" ]
+  const currentInQueue = 0
+  
+
   useEffect( () => {
     // Fetch models from data source
     // For now, using static data
@@ -134,7 +144,7 @@ function DesignerPortal() {
       <div className='w-full mt-5'>
         <StageStatus
           label="Current Stage"
-          status="selection"
+          status={stageStatus}
           description="Designers are selecting models"
           role="designer"
         />
@@ -195,17 +205,23 @@ function DesignerPortal() {
               />
             ))}
           </div>
+          
 
         </div>
-        
 
-        <StarlistPanel
-          favoriteModels={favoriteModels}
-          finalSelection={finalSelection}
-          onSelectionToggle={handleSelectionToggle}
-          isStarlistOpen={isStarlistOpen}
-          onCloseStarlist={() => setIsStarlistOpen(false)}
-        />
+        <div className="flex w-full flex-col gap-4 md:w-1/3 lg:w-1/4">
+          <StarlistPanel
+            favoriteModels={favoriteModels}
+            finalSelection={finalSelection}
+            onSelectionToggle={handleSelectionToggle}
+            isStarlistOpen={isStarlistOpen}
+            onCloseStarlist={() => setIsStarlistOpen(false)}
+            stageStatus={stageStatus}
+            queue={queue}
+            profileName={profile.name}
+            currentInQueue={currentInQueue}
+          />
+        </div>
       </div>
 
     </section>

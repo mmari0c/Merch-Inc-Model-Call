@@ -2,6 +2,8 @@ import { useState } from 'react'
 import StageStatus from '../components/StageStatus.jsx'
 import DesignerOrder from '../components/DesignerOrder.jsx'
 import Stats from '../components/Stats.jsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { icons } from '../icons.js'
 
 const CAMPAIGN_STAGES = [
   {
@@ -32,11 +34,55 @@ const CAMPAIGN_STAGES = [
 ]
 
 const DESIGNERS = [
-  { name: 'Designer A', turnOrder: 1 },
-  { name: 'Designer B', turnOrder: 2 },
-  { name: 'Designer C', turnOrder: 3 },
-  { name: 'Designer D', turnOrder: 4 },
+  { name: 'Designer A', turnOrder: 1, phoneNumber: '123-456-7890', email: 'designerA@example.com' },
+  { name: 'Designer B', turnOrder: 2, phoneNumber: '234-567-8901', email: 'designerB@example.com' },
+  { name: 'Designer C', turnOrder: 3, phoneNumber: '345-678-9012', email: 'designerC@example.com' },
+  { name: 'Designer D', turnOrder: 4, phoneNumber: '456-789-0123', email: 'designerD@example.com' },
 ]
+
+const models = [
+  { modelNumber: 'M-001', name: 'Model One', phoneNumber: '111-222-3333', email: 'modelOne@example.com' },
+  { modelNumber: 'M-002', name: 'Model Two', phoneNumber: '222-333-4444', email: 'modelTwo@example.com' },
+  { modelNumber: 'M-003', name: 'Model Three', phoneNumber: '333-444-5555', email: 'modelThree@example.com' },
+  { modelNumber: 'M-004', name: 'Model Four', phoneNumber: '444-555-6666', email: 'modelFour@example.com' },
+  { modelNumber: 'M-005', name: 'Model Five', phoneNumber: '555-666-7777', email: 'modelFive@example.com' },
+]
+
+const matches = [
+  { designer: 'Designer A', model: ['Model One'] },
+  { designer: 'Designer B', model: ['Model Two'] },
+  { designer: 'Designer C', model: ['Model Three', 'Model Four'] },
+]
+
+const PICKS_LOGS = {
+  Designers: {
+    columns: ['Designer', 'Turn Order', 'Phone', 'Email'],
+    rows: DESIGNERS.map((designer) => ({
+      Designer: designer.name,
+      'Turn Order': designer.turnOrder,
+      Phone: designer.phoneNumber,
+      Email: designer.email,
+    })),
+  },
+  Models: {
+    columns: ['Model', 'Model Number', 'Phone', 'Email'],
+    rows: models.map((model) => ({
+      Model: model.name,
+      'Model Number': model.modelNumber,
+      Phone: model.phoneNumber,
+      Email: model.email,
+    })),
+  },
+  Matches: {
+    columns: ['Designer', 'Model'],
+    rows: matches.flatMap((match) =>
+      match.model.map((modelName) => ({
+        Designer: match.designer,
+        Model: modelName,
+      }))
+    ),
+  },
+}
 
 const STATS = [
   { data: '150', description: 'Total Models' },
@@ -48,8 +94,12 @@ const STATS = [
 function AdminPortal() {
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [selectedLog, setSelectedLog] = useState('Designers')
   const currentStage = CAMPAIGN_STAGES[currentStageIndex]
   const nextStage = CAMPAIGN_STAGES[currentStageIndex + 1]
+  const activeLog = PICKS_LOGS[selectedLog]
+  const csvColumns = activeLog?.columns ?? []
+  const csvRows = activeLog?.rows ?? []
 
   const handleAdvanceStage = () => {
     if (nextStage) {
@@ -67,6 +117,30 @@ function AdminPortal() {
   }
   const handleCloseConfirm = () => {
     setIsConfirmOpen(false)
+  }
+
+  const formatCsvValue = (value) => {
+    if (value === null || value === undefined) {
+      return '""'
+    }
+    return `"${String(value).replace(/"/g, '""')}"`
+  }
+
+  const buildCsv = (columns, rows) => {
+    const header = columns.map(formatCsvValue).join(',')
+    const body = rows.map((row) => columns.map((column) => formatCsvValue(row[column])).join(','))
+    return [header, ...body].join('\n')
+  }
+
+  const handleDownloadCsv = () => {
+    const csvContent = buildCsv(csvColumns, csvRows)
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `picks-${selectedLog.toLowerCase()}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -98,12 +172,66 @@ function AdminPortal() {
       </div>
 
       <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4 h-100'>
-        <h2>Picks Log</h2>
-        {/* ADD CSV FILE INFORMATION ON HERE */}
-        <p>CSV INFO</p>
+        <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+          <div>
+            <h2>Picks Log</h2>
+          </div>
+          <div className='flex flex-wrap items-center gap-2'>
+            <select
+              className='bg-white border-gray-200 border p-2 rounded-lg hover:bg-gray-50'
+              value={selectedLog}
+              onChange={(event) => setSelectedLog(event.target.value)}
+            >
+              <option>Designers</option>
+              <option>Models</option>
+              <option>Matches</option>
+            </select>
+            <button
+              type='button'
+              className='rounded-lg border border-gray-200 px-3 py-2 font-medium text-gray-700 hover:bg-gray-50'
+              onClick={handleDownloadCsv}
+            >
+              <FontAwesomeIcon icon={icons.download} className='' />
+            </button>
+          </div>
+        </div>
+        <div className='overflow-x-auto overflow-y-auto rounded-lg'>
+          <table className='w-full text-left text-xs sm:text-sm'>
+            <thead className=' text-sand-600'>
+              <tr>
+                {csvColumns.map((column) => (
+                  <th key={column} className='px-3 py-2 font-medium'>
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {csvRows.length > 0 ? (
+                csvRows.map((row, rowIndex) => (
+                  <tr key={`${selectedLog}-${rowIndex}`}>
+                    {csvColumns.map((column) => (
+                      <td key={`${selectedLog}-${rowIndex}-${column}`} className='px-3 py-2 border-t border-gray-100'>
+                        {row[column]}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={csvColumns.length || 1}
+                    className='px-3 py-6 text-center text-gray-500'
+                  >
+                    No data available for this log.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
 
 
     <div className='w-full gap-4 text-center grid grid-cols-2 md:flex md:flex-row mb-5'>

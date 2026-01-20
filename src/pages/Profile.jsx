@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useParams } from 'react-router-dom'
 import { icons } from '../icons.js'
+import { useEffect, useRef, useState } from 'react'
 
 function Profile() {
    const { modelName } = useParams()
@@ -12,31 +13,79 @@ function Profile() {
       email: 'marionolasco@gmail.com',
       phone: '469-555-1234',
       available: false,
-      instagram: 'mmari0c'
+      instagram: 'mmari0c',
+      ethnicity: null,
+      gender: null,
+      height: null,
+      weight: null,
+      body: null,
    }
 
+
+
+   const [userInfo, setUserInfo] = useState(profile)
+   const [photos, setPhotos] = useState([])
+   const fileInputRef = useRef(null)
+   const photosRef = useRef([])
    const photoSlots = Array.from({ length: 6 })
+
+   const handleChange = (event) => {
+      const { name, value } = event.target
+      setUserInfo((prev) => ({ ...prev, [name]: value }))
+      console.log(userInfo)
+   }
+
+   const handleAddPhotos = (event) => {
+      const files = Array.from(event.target.files || [])
+      if (!files.length) return
+
+      setPhotos((prev) => {
+         const remainingSlots = Math.max(0, 6 - prev.length)
+         const nextPhotos = files.slice(0, remainingSlots).map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+         }))
+         return [...prev, ...nextPhotos]
+      })
+
+      event.target.value = ''
+   }
+
+   const handleRemovePhoto = (index) => {
+      setPhotos((prev) => {
+         const next = [...prev]
+         const removed = next.splice(index, 1)
+         if (removed[0]) {
+            URL.revokeObjectURL(removed[0].url)
+         }
+         return next
+      })
+   }
+
+   const handleOpenFilePicker = () => {
+      if (photos.length >= 6) return
+      fileInputRef.current?.click()
+   }
+
+   useEffect(() => {
+      photosRef.current = photos
+   }, [photos])
+
+   useEffect(() => {
+      return () => {
+         photosRef.current.forEach((photo) => URL.revokeObjectURL(photo.url))
+      }
+   }, [])
 
    return (
       <section className="profile-page flex items-center justify-center min-h-screen px-6 py-12 text-xs sm:text-sm">
-         <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-8 md:flex-row md:items-start">
-            <div className="flex flex-col w-full items-center gap-4 md:sticky md:w-fit md:top-12 md:h-fit md:bg-white md:border-2 md:border-gray-200 md:rounded-lg md:p-6  ">
-               <div className='flex w-full flex-col items-center gap-4 md:items-center md:text-center '>
-                  <div className='w-30 h-30 rounded-full bg-gray-100 border-2 border-gray-200 flex items-center justify-center text-gray-400 text-lg font-medium'>
-                     {profile.name?.split(' ').map(word => word[0]).join('')}
-                  </div>
-                  <div>
-                     <h2 className='text-lg font-semibold'>{profile.name}</h2>
-                     <p className='text-gray-500'>Model Number: <span className='font-medium text-gray-700'>{profile.modelNumber}</span></p>
-                  </div>
-               </div>
+         <div className="w-full max-w-2xl flex flex-col items-center justify-center gap-8">
+            {/* If account is being created, it says "Create Profile", otherwise "Edit Profile" */}
+            <p className='text-xl font-semibold text-left w-full max-w-3xl border-b border-gray-200 pb-3 '>Edit Profile</p>
 
+            <div className='md:max-w-2xl w-full'>
 
-            </div>
-
-            <div className='md:max-w-md'>
-
-            <div className="grid gap-6">
+            <div className="grid gap-6 w-full">
                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
                   <div>
                      <h3 className='text-base font-semibold'>Basic Information</h3>
@@ -45,23 +94,24 @@ function Profile() {
                   <div className='grid gap-4 sm:grid-cols-2'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="name" className='font-medium'>Full Name</label>
-                        <input type="text" id="name" defaultValue={profile.name} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="name" name="name" defaultValue={userInfo.name} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="email" className='font-medium'>Email Address</label>
-                        <input type="email" id="email" defaultValue={profile.email} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="email" id="email" name="email" defaultValue={userInfo.email} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="phone" className='font-medium'>Phone Number</label>
-                        <input type="text" id="phone" defaultValue={profile.phone} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="phone" name="phone" defaultValue={userInfo.phone} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="instagram" className='font-medium'>Instagram</label>
-                        <input type="text" id="instagram" defaultValue={profile.instagram} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="instagram" name="instagram" defaultValue={userInfo.instagram} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="gender" className='font-medium'>Gender</label>
-                        <select id="gender" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
+                        <select id="gender" name="gender" defaultValue={userInfo.gender} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
+                           <option value="" disabled selected hidden>Select One</option>
                            <option value="male">Male</option>
                            <option value="female">Female</option>
                            <option value="non-binary">Non-binary</option>
@@ -70,7 +120,8 @@ function Profile() {
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="ethnicity" className='font-medium'>Ethnicity</label>
-                        <select id="ethnicity" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
+                        <select id="ethnicity" name="ethnicity" defaultValue={userInfo.ethnicity} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black'>
+                           <option value="" disabled selected hidden>Select One</option>
                            <option value="latino">Hispanic/Latino</option>
                            <option value="black">Black</option>
                            <option value="white">White</option>
@@ -90,17 +141,61 @@ function Profile() {
                      <h3 className='text-base font-semibold'>Photos</h3>
                      <p className='text-gray-500'>Add up to 6 photos. Your first photo becomes the profile cover shown to designers.</p>
                   </div>
+                  <input
+                     ref={fileInputRef}
+                     type="file"
+                     accept="image/*"
+                     multiple
+                     onChange={handleAddPhotos}
+                     className="hidden"
+                  />
                   <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
                      {photoSlots.map((_, index) => (
-                        <button
-                           key={index}
-                           type="button"
-                           className='aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-50'
-                        >
-                           + Upload
-                        </button>
+                        photos[index] ? (
+                           <div
+                              key={index}
+                              className="relative aspect-square rounded-lg bg-gray-100 overflow-visible"
+                           >
+                              <div className="h-full w-full overflow-hidden rounded-lg">
+                                 <img
+                                    src={photos[index].url}
+                                    alt={`Profile photo ${index + 1}`}
+                                    className="h-full w-full object-cover"
+                                 />
+                              </div>
+                              <button
+                                 type="button"
+                                 onClick={() => handleRemovePhoto(index)}
+                                 className="absolute -right-2 -top-2 z-10 inline-flex h-4 w-4 items-center p-2 justify-center rounded-full border-2 border-white bg-black text-white shadow"
+                              >
+                                 <FontAwesomeIcon className='text-[11px] md:text-[10px]' icon={icons.close} />
+                              </button>
+                              {index === 0 && (
+                                 <span className="absolute left-2 bottom-2 rounded-full bg-white px-2 py-1 text-xs font-medium text-black">
+                                    Cover
+                                 </span>
+                              )}
+                           </div>
+                        ) : (
+                           <button
+                              key={index}
+                              type="button"
+                              onClick={handleOpenFilePicker}
+                              className='relative aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col gap-2 items-center justify-center  hover:bg-gray-50 text-gray-500 md:text-xs' 
+                           >
+                              <span className="relative inline-flex items-center justify-center">
+                                 <FontAwesomeIcon icon={icons.camera} className="text-2xl text-black md:text-xl" />
+                                 <span className="absolute bottom-3.5 right-4 inline-flex h-4 w-4 items-center justify-center rounded-full border border-white bg-black text-white shadow md:h-3.5 md:w-3.5">
+                                    <FontAwesomeIcon icon={icons.plus} className="text-[13px] md:text-[10px]" />
+                                 </span>
+                                 
+                              </span>
+                              Add a Photo
+                           </button>
+                        )
                      ))}
                   </div>
+                  <p className="text-xs text-gray-500">{photos.length}/6 photos uploaded</p>
                </div>
 
                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
@@ -110,23 +205,26 @@ function Profile() {
                   <div className='grid gap-4 sm:grid-cols-3'>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="height" className='font-medium'>Height</label>
-                        <input type="text" id="height" placeholder="5'8 or 173cm" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="height" name='height' placeholder="5'8 or 173cm" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="weight" className='font-medium'>Weight</label>
-                        <input type="text" id="weight" placeholder="150 lbs or 68 kg" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="weight" name='weight' placeholder="150 lbs or 68 kg" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
                         <label htmlFor="body" className='font-medium'>Body Measurements</label>
-                        <input type="text" id="body" placeholder="38-24-36" className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <input type="text" id="body" name='body' placeholder="38-24-36" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                   </div>
                </div>
             </div>
-
+            
+            {/* SUBMIT CHANGES TO SUPABASE AND REROUTE TO MODEL PAGE */}
             <div className='flex justify-end mt-4'>
-               <button type="button" className='bg-sand-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-sand-700 transition-colors'>Save Profile</button>
+                  <button type="button" className='mr-4 px-6 py-3 font-medium rounded-sm hover:opacity-75 border transition-colors'>Cancel</button>
+                  <button type="button" className='bg-black text-white px-6 py-3 rounded-sm font-medium hover:opacity-75 transition-colors'>Save</button>
             </div>
+
             </div>
          </div>
       </section>
