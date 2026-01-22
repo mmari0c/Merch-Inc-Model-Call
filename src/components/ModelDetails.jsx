@@ -5,8 +5,18 @@ import { icons } from '../icons.js'
 function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
 
    const [model, setModel] = useState(selectedModel)
+   const [activePhotoIndex, setActivePhotoIndex] = useState(0)
    const instagramHandle = model.instagram?.replace(/^@/, '')
    const instagramUrl = instagramHandle ? `https://www.instagram.com/${instagramHandle}` : ''
+   const photos = model.photos?.length
+      ? model.photos
+      : [
+         { id: 'p1', className: 'bg-gray-100' },
+         { id: 'p2', className: 'bg-gray-100' },
+         { id: 'p3', className: 'bg-gray-100' },
+         { id: 'p4', className: 'bg-gray-100' },
+      ]
+   const hasMultiplePhotos = photos.length > 1
 
    const handleFavoriteClick = (event) => {
     event.stopPropagation()
@@ -16,15 +26,67 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
     }
    }
 
+   const handlePrevPhoto = () => {
+      setActivePhotoIndex((index) => (index - 1 + photos.length) % photos.length)
+   }
+
+   const handleNextPhoto = () => {
+      setActivePhotoIndex((index) => (index + 1) % photos.length)
+   }
+
+   const renderPhoto = (photo, className) => (
+      <div
+         className={`relative w-full h-64 sm:h-72 md:h-80 overflow-hidden rounded-xl border border-gray-200 ${className} ${photo.className || ''}`}
+      >
+         {photo.url ? (
+            <img
+               src={photo.url}
+               alt={`${model.name} photo`}
+               className="absolute inset-0 h-full w-full object-cover"
+            />
+         ) : null}
+      </div>
+   )
+
    return (
    <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 text-xs sm:text-sm' onClick={() => onClose()}>
-        <div className='bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl m-4' onClick={(e) => e.stopPropagation()}>
+        <div className='bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl m-4 max-h-[90vh] overflow-y-auto' onClick={(e) => e.stopPropagation()}>
           <h3 className='font-semibold mb-1'>{model.name.charAt(0).toUpperCase() + model.name.slice(1)}</h3>
           <p className='text-gray-600 mb-4'>#{model.modelNumber}</p>
           <button className='absolute top-3 right-3 text-gray-600 hover:text-gray-700' aria-label='Close details' onClick={() => onClose()}>
             ✕
           </button>
-          <div className='w-full h-80 bg-gray-100 rounded-xl mb-4' aria-hidden="true" />
+          <div className="relative w-full mb-4">
+            {renderPhoto(photos[activePhotoIndex], '')}
+            {hasMultiplePhotos ? (
+               <>
+                  <button
+                     type="button"
+                     className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-2 shadow-md transition hover:bg-white"
+                     onClick={handlePrevPhoto}
+                     aria-label="Previous photo"
+                  >
+                     <FontAwesomeIcon icon={icons.angleLeft} />
+                  </button>
+                  <button
+                     type="button"
+                     className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-2 shadow-md transition hover:bg-white"
+                     onClick={handleNextPhoto}
+                     aria-label="Next photo"
+                  >
+                     <FontAwesomeIcon icon={icons.angleRight} />
+                  </button>
+                  <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
+                     {photos.map((photo, index) => (
+                        <span
+                           key={photo.id || `photo-${index}`}
+                           className={`h-1.5 w-1.5 rounded-full ${index === activePhotoIndex ? 'bg-white' : 'bg-white/50'} shadow-sm`}
+                        />
+                     ))}
+                  </div>
+               </>
+            ) : null}
+          </div>
 
          <div className='flex flex-col gap-2'>
             <div className=''>

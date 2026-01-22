@@ -6,10 +6,11 @@ import { icons } from '../icons.js'
 
 function SignUp() {
    const [formData, setFormData] = useState({
-      role: 'model',
+      role: '',
       fullName: '',
       email: '',
       phoneNumber: '',
+      password: '',
    })
    const [submittedData, setSubmittedData] = useState(null)
    const [status, setStatus] = useState({ type: '', message: '' })
@@ -30,7 +31,7 @@ function SignUp() {
       event.preventDefault()
       setStatus({ type: '', message: '' })
 
-      if (!formData.fullName || !formData.email || !formData.phoneNumber) {
+      if (!formData.fullName || !formData.email || !formData.password || !formData.role) {
          setStatus({ type: 'error', message: 'Please fill out all required fields.' })
          return
       }
@@ -40,7 +41,7 @@ function SignUp() {
          type: 'success',
          message: `Signed up locally. Thank you for joining the model call as a ${formData.role}!`,
       })
-      setFormData((prev) => ({ ...prev, fullName: '', email: '', phoneNumber: '' }))
+      setFormData((prev) => ({ ...prev, fullName: '', email: '', password: '', role: '' }))
       console.log('Form Data Submitted:', formData)
    }
 
@@ -49,14 +50,14 @@ function SignUp() {
       <div className="min-h-screen flex items-center justify-center px-6 py-12 text-xs sm:text-sm">
          <div className={`${status.type === 'success' ? 'hidden' : 'block'} w-full max-w-5xl flex flex-col gap-10 items-center md:flex-row md:items-center md:gap-16`}>
             <div className='w-full md:w-1/2 flex flex-col gap-4 items-center text-center'>
-               <img src={logo} alt="Merch Inc Logo" className="w-30 md:w-70 lg:w-90 h-auto" />
+               <img src={logo} alt="Merch Inc Logo" className="w-25 md:w-70 lg:w-90 h-auto" />
             </div>
-            <div className='w-full md:w-1/2 flex flex-col gap-5'>
+            <div className='w-full items-center  md:w-1/2 flex flex-col gap-5'>
                <div className='text-center'>
                   <h1 className='text-xl font-semibold'>Model Call Sign Up</h1>
-                  <p className='text-gray-500'>Register as a model or designer to get started.</p>
+                  <p className='text-gray-500'>Ready to make the model call process seamless?</p>
                </div>
-               <form onSubmit={handleSignUp} className="bg-white border-2 border-gray-200 p-5 rounded-lg flex flex-col gap-4 w-full">
+               <form onSubmit={handleSignUp} className="bg-white border-2 border-gray-200 p-5 rounded-lg flex flex-col  gap-4 w-md">
                   <div className="flex flex-col gap-1 ">
                      <label htmlFor="role" className="font-medium">I am a...</label>
                      <select
@@ -64,14 +65,15 @@ function SignUp() {
                         name="role"
                         value={formData.role}
                         onChange={handleChange}
-                        className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                        className="bg-gray-100 rounded-lg p-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
                      >
+                        <option className='' value="" disabled selected hidden>Select role</option>
                         <option value="model">Model</option>
                         <option value="designer">Designer</option>
                      </select>
                   </div>
                   <div className="flex flex-col gap-1">
-                     <label htmlFor="fullName" className="font-medium"></label>
+                     <label htmlFor="fullName" className="font-medium">Full Name</label>
                      <input
                         type="text"
                         id="fullName"
@@ -79,12 +81,12 @@ function SignUp() {
                         value={formData.fullName}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
-                        placeholder='Full Name'
+                        placeholder='Mario Nolasco'
                      />
                   </div>
 
                   <div className="flex flex-col gap-1">
-                     <label htmlFor="email" className="font-medium"></label>
+                     <label htmlFor="email" className="font-medium">Email</label>
                      <input
                         type="email"
                         id="email"
@@ -92,20 +94,19 @@ function SignUp() {
                         value={formData.email}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
-                        placeholder='Email Address'
+                        placeholder='example@gmail.com'
                      />
                      </div>
-
                      <div className="flex flex-col gap-1">
-                        <label htmlFor="phoneNumber" className="font-medium"></label>
+                        <label htmlFor="password" className="font-medium">Password</label>
                      <input
-                        type="text"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
                         className="bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black"
-                        placeholder='Phone Number'
+                        placeholder='At least 6 characters'
                      />
                   </div>
                   {status.message ? (
@@ -121,6 +122,9 @@ function SignUp() {
                   ) : null}
                   <button className="bg-black text-white p-3 rounded-sm font-medium hover:opacity-80 transition-colors" type="submit">Join Model Call</button>
                </form>
+                           <p className="text-gray-600 text-center text-xs">
+               Already have an account? <a href="/login" className="text-black font-medium hover:underline">Log In</a>
+            </p>
             </div>
          </div>
          <div className={`${status.type === 'success' ? 'block' : 'hidden'} max-w-sm w-full bg-white p-8 rounded-xl border-2 border-gray-200 flex flex-col items-center justify-center gap-4 h-fit mt-6 `}>

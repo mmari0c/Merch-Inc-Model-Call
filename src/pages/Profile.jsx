@@ -19,7 +19,7 @@ function Profile() {
       height: null,
       weight: null,
       body: null,
-      profileStatus: 'active', // 'active' or 'incomplete'
+      profileStatus: 'incomplete', // 'active' or 'incomplete'
    }
 
 
@@ -144,8 +144,9 @@ function Profile() {
                            name="email"
                            defaultValue={userInfo.email}
                            onChange={handleChange}
-                           className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.email ? 'border border-red-500' : ''}`}
+                           className={`bg-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.email ? 'border border-red-500' : ''}`}
                            required
+                           disabled
                         />
                         {fieldErrors.email ? (
                            <p className="text-xs text-red-600">{fieldErrors.email}</p>
@@ -167,7 +168,7 @@ function Profile() {
                         ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="instagram" className='font-medium'>Instagram <span className='text-gray-400'>(Optional)</span></label>
+                        <label htmlFor="instagram" className='font-medium'>Instagram</label>
                         <input type="text" id="instagram" name="instagram" defaultValue={userInfo.instagram} onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
@@ -180,7 +181,7 @@ function Profile() {
                            className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.gender ? 'border border-red-500' : ''}`}
                            required
                         >
-                           <option value="" disabled hidden>Select One</option>
+                           <option value="" selected disabled hidden>Select Gender</option>
                            <option value="male">Male</option>
                            <option value="female">Female</option>
                            <option value="non-binary">Non-binary</option>
@@ -200,7 +201,7 @@ function Profile() {
                            className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.ethnicity ? 'border border-red-500' : ''}`}
                            required
                         >
-                           <option value="" disabled hidden>Select One</option>
+                           <option value="" selected disabled hidden>Select Ethnicity</option>
                            <option value="latino">Hispanic/Latino</option>
                            <option value="black">Black</option>
                            <option value="white">White</option>
@@ -288,12 +289,12 @@ function Profile() {
                   </div>
                   <div className='grid gap-4 sm:grid-cols-3'>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="height" className='font-medium'>Height</label>
+                        <label htmlFor="height" className='font-medium'>Height <span className='text-gray-400'>(ft'in")</span></label>
                         <input
                            type="text"
                            id="height"
                            name='height'
-                           placeholder="5'8 or 173cm"
+                           placeholder="5'8"
                            onChange={handleChange}
                            className={`bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black ${fieldErrors.height ? 'border border-red-500' : ''}`}
                            required
@@ -303,11 +304,11 @@ function Profile() {
                         ) : null}
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="weight" className='font-medium'>Weight <span className='text-gray-400'>(Optional)</span></label>
-                        <input type="text" id="weight" name='weight' placeholder="150 lbs or 68 kg" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
+                        <label htmlFor="weight" className='font-medium'>Weight <span className='text-gray-400'>(lbs)</span></label>
+                        <input type="text" id="weight" name='weight' placeholder="150" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                      <div className='flex flex-col gap-1'>
-                        <label htmlFor="body" className='font-medium'>Body Measurements <span className='text-gray-400'>(Optional)</span></label>
+                        <label htmlFor="body" className='font-medium'>Body Measurements</label>
                         <input type="text" id="body" name='body' placeholder="38-24-36" onChange={handleChange} className='bg-gray-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black' />
                      </div>
                   </div>

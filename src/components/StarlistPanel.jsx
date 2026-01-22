@@ -27,6 +27,16 @@ function StarlistPanel({
     navigate('/confirmation/designer', { state: { participants: finalSelection } })
   }
 
+  const designer = { 
+    name: 'Daniel',
+    designerNumber : 'D-001'
+   }
+
+  const addSelf = () => {
+    null
+  }
+
+
   return (
     <>
       <div className='hidden sm:sticky md:top-0 md:pt-2 md:flex md:flex-col md:gap-6 w-full'>
@@ -49,7 +59,7 @@ function StarlistPanel({
             Starlist{' '}
             <FontAwesomeIcon className='text-amber-500' icon={icons.favoriteSolid} />
           </p>
-          <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors'>
+          <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors' onClick={addSelf}>
             Add Self
           </button>
           {favoriteModels.length === 0 && (

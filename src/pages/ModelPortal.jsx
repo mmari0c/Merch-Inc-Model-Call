@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import StageStatus from '../components/StageStatus.jsx'
 import { icons } from '../icons.js'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import MatchScreen from '../components/MatchScreen.jsx'
 
@@ -17,7 +18,7 @@ function ModelPortal() {
       { name: "Photoshoots", status: "upcoming", description: "Models are participating in photoshoots" },
     ],
     modelNumber: "M-001",
-    favorites: [],
+    favorites: ["Designer A", "Designer B"],
     isSelected: false,
     instagram: "@mario_nolasco",
   }
@@ -32,18 +33,17 @@ function ModelPortal() {
     { id: 'p4', className: 'bg-gray-100' },
   ]
 
-  const hasCarousel = photos.length > 2
+  const hasMultiplePhotos = photos.length > 1
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0)
   const radarBanner = (
-    <div className="flex items-center gap-2 bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+    <div className="flex items-center justify-center bg-white p-3 rounded-full h-10 w-10 shadow-sm">
       {model.favorites.length > 0 ? (
         <>
           <FontAwesomeIcon className="text-amber-500 text-xl" icon={icons.favoriteSolid} />
-          <p>Your profile is on a designer's radar!</p>
         </>
       ) : (
         <>
-          <FontAwesomeIcon className="text-amber-500 text-xl" icon={icons.favorite} />
-          <p>Your profile is still getting discovered</p>
+          <FontAwesomeIcon className="text-black text-xl" icon={icons.favorite} />
         </>
       )}
     </div>
@@ -52,15 +52,28 @@ function ModelPortal() {
   const renderPhoto = (photo, index, className) => (
     <div
       key={photo.id}
-      className={`relative rounded-2xl border border-gray-200 aspect-[4/5] ${className} ${photo.className}`}
+      className={`relative rounded-2xl border border-gray-200 aspect-[4.5/5] ${className} ${photo.className}`}
     >
-      {index === 0 && (
-        <div className="absolute right-3 bottom-3 lg:top-3 lg:bottom-auto">
+      <div className="absolute right-3 bottom-3 md:top-3 md:bottom-auto md:hidden">
+          {radarBanner}
+      </div>
+
+      { index === 0 && (
+        <div className="absolute right-3 top-3 hidden md:block">
           {radarBanner}
         </div>
-      )}
+      )
+      }
     </div>
   )
+
+  const handlePrevPhoto = () => {
+    setActivePhotoIndex((index) => (index - 1 + photos.length) % photos.length)
+  }
+
+  const handleNextPhoto = () => {
+    setActivePhotoIndex((index) => (index + 1) % photos.length)
+  }
 
   const TEST_DESIGNER = { name: 'Designer A', contact: 4695551234 }
 
@@ -79,29 +92,51 @@ function ModelPortal() {
         />
 
         <div className="model-info mt-6 bg-white">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
             <div className="flex flex-col gap-4 relative">
-              {hasCarousel ? (
-                <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory lg:hidden">
-                  {photos.map((photo, index) =>
-                    renderPhoto(photo, index, 'min-w-[70%] snap-center')
-                  )}
-                </div>
-              ) : (
-                null
-              )}
+              <div className="relative w-screen -mx-4 sm:-mx-6 md:hidden">
+                {renderPhoto(photos[activePhotoIndex], activePhotoIndex, 'w-full rounded-none')}
+                {hasMultiplePhotos ? (
+                  <>
+                    <button
+                      type="button"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/40 p-2 shadow-md transition hover:bg-white"
+                      onClick={handlePrevPhoto}
+                      aria-label="Previous photo"
+                    >
+                      <FontAwesomeIcon icon={icons.angleLeft} />
+                    </button>
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/40 p-2 shadow-md transition hover:bg-white"
+                      onClick={handleNextPhoto}
+                      aria-label="Next photo"
+                    >
+                      <FontAwesomeIcon icon={icons.angleRight} className='' />
+                    </button>
+                    <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
+                      {photos.map((photo, index) => (
+                        <span
+                          key={photo.id}
+                          className={`h-1.5 w-1.5 rounded-full ${index === activePhotoIndex ? 'bg-white' : 'bg-white/50'} shadow-sm`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+              </div>
 
-              <div className="hidden lg:flex flex-col gap-4">
+              <div className="hidden md:flex flex-col gap-4">
                 {photos.map((photo, index) => renderPhoto(photo, index, ''))}
               </div>
             </div>
 
-            <div className="flex flex-col gap-5  lg:sticky lg:top-6 lg:self-start lg:max-w-sm">
+            <div className="flex flex-col gap-5  md:sticky md:top-6 md:self-start md:max-w-sm">
               <div className="flex flex-col items-start justify-between gap-2">
                 <div>
-                  <h1 className="text-lg font-medium">{model.name}</h1>
+                  <h1 className="font-medium text-sm sm:text-md md:text-lg">{model.name}</h1>
                 </div>
-                <div className="text-lg text-gray-600 flex justify-between items-center w-full">
+                <div className="text-gray-600 flex justify-between items-center w-full text-sm sm:text-md md:text-lg">
                   #{model.modelNumber}
                   {instagramHandle ? (
                   <a
@@ -135,7 +170,7 @@ function ModelPortal() {
                   </div>
                   <div>
                     <label className="text-gray-600">Weight</label>
-                    <p className="font-medium">160 lbs</p>
+                    <p className="font-medium">150 lbs</p>
                   </div>
                 </div>
                 <div className="">
@@ -146,9 +181,9 @@ function ModelPortal() {
                 </div>
 
               </div>
-                  <Link className="w-full py-3 rounded-sm font-medium bg-black text-white hover:opacity-80 transition-colors flex items-center justify-center gap-2" to="/profile/mario">
+                  <Link className="w-full py-3 rounded-sm font-semibold bg-black text-white hover:opacity-80 transition-colors flex items-center justify-center gap-2" to="/profile/mario">
                     <FontAwesomeIcon icon={icons.pencil} />
-                    Edit Profile
+                    Edit
                 </Link>
             </div>
           </div>
