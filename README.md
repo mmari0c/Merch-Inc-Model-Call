@@ -33,9 +33,8 @@ This project enables:
 - Models who were not selected during the initial model call to still participate in the show  
 - Designers to easily view and evaluate models who remain available after the original model call  
 
-## Demo (Figma Prototype)
-[View Figma Demo](https://www.figma.com/make/u88hRbZ6gWMlwZMvsHsQeu/Fashion-Show-Model-Call-Wireframes?node-id=0-1&t=NDNBv05NmcmsxZCM-1)
-
+## Figma Design
+[View Figma Design](https://www.figma.com/design/IeHyvQ1xqSONkeDg6p1hCY/Merch-Inc-Model-Call?node-id=0-1&t=VrUZUeh6qfTopfLs-1)
 
 ## Tech Stack (Planned)
 - **Frontend:** React  
