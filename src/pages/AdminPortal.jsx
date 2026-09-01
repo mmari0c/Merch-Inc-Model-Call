@@ -24,6 +24,8 @@ function AdminPortal() {
   const [currentStageKey, setCurrentStageKey] = useState('registration')
   const [modelCallId, setModelCallId] = useState(null)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
   const [selectedLog, setSelectedLog] = useState('Designers')
   const [designers, setDesigners] = useState([])
   const [models, setModels] = useState([])
@@ -133,6 +135,19 @@ function AdminPortal() {
         return next
       })
     }
+  }
+
+  const handleResetEvent = async () => {
+    setIsResetting(true)
+    const { error } = await supabase.rpc('reset_event')
+    if (error) {
+      alert(`Reset failed: ${error.message}`)
+      setIsResetting(false)
+      return
+    }
+    setIsResetConfirmOpen(false)
+    setIsResetting(false)
+    window.location.reload()
   }
 
   const handleAdvanceRequest = () => { if (nextStage) setIsConfirmOpen(true) }
@@ -249,6 +264,15 @@ function AdminPortal() {
         isAdvanceDisabled={!nextStage}
       />
       <div className='flex flex-col items-center w-[90%] max-w-6xl mx-auto gap-6 mt-6 flex-1'>
+        <div className='w-full flex justify-end'>
+          <button
+            type='button'
+            className='px-4 py-2 rounded-sm border border-red-200 text-red-600 text-sm hover:bg-red-50 transition-colors'
+            onClick={() => setIsResetConfirmOpen(true)}
+          >
+            Reset Event
+          </button>
+        </div>
 
       <div className='w-full flex-1 flex flex-col gap-5 md:flex-row md:justify-between'>
         <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4 overflow-y-auto'>
@@ -326,6 +350,45 @@ function AdminPortal() {
           <Stats key={stat.description} data={stat.data} description={stat.description} />
         ))}
       </div>
+
+      {isResetConfirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center text-sm">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close confirmation"
+            onClick={() => setIsResetConfirmOpen(false)}
+          />
+          <div
+            className="relative w-[90%] max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl"
+            role="dialog"
+            aria-modal="true"
+          >
+            <h3 className="text-base font-semibold">Reset Event</h3>
+            <p className="mt-2 text-gray-600">
+              This will delete <strong>all models, designers, and accounts</strong> and reset everything back to Registration. This cannot be undone.
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                className="px-4 py-2 rounded-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
+                onClick={() => setIsResetConfirmOpen(false)}
+                disabled={isResetting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 rounded-sm bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                onClick={handleResetEvent}
+                disabled={isResetting}
+              >
+                {isResetting ? 'Resetting...' : 'Reset Event'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center text-sm">
