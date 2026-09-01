@@ -89,15 +89,16 @@ function SignUp() {
    return (
       <div className="min-h-screen flex items-center justify-center px-6 py-12 text-xs sm:text-sm">
          <div className={`${status.type === 'success' ? 'hidden' : 'block'} w-full max-w-5xl flex flex-col gap-10 items-center md:flex-row md:items-center md:gap-16`}>
-            <div className='w-full md:w-1/2 flex flex-col gap-4 items-center text-center'>
-               <img src={logo} alt="Merch Inc Logo" className="w-25 md:w-70 lg:w-90 h-auto" />
+            <div className='hidden md:flex w-full md:w-1/2 flex-col gap-4 items-center text-center'>
+               <img src={logo} alt="Merch Inc Logo" className="w-70 lg:w-90 h-auto" />
             </div>
-            <div className='w-full items-center  md:w-1/2 flex flex-col gap-5'>
+            <div className='w-full items-center md:w-1/2 flex flex-col gap-5'>
                <div className='text-center'>
+                  <img src={logo} alt="Merch Inc Logo" className="w-28 h-auto mx-auto mb-2 md:hidden" />
                   <h1 className='text-xl font-semibold'>Model Call Sign Up</h1>
                   <p className='text-gray-500'>Ready to make the model call process seamless?</p>
                </div>
-               <form onSubmit={handleSignUp} className="border-2 border-gray-100 p-5 rounded-lg flex flex-col  gap-4 w-md">
+               <form onSubmit={handleSignUp} className="border-2 border-gray-100 p-5 rounded-lg flex flex-col gap-4 w-full">
                   <div className="flex flex-col gap-1 ">
                      <label htmlFor="role" className="font-medium">I am a...</label>
                      <select
