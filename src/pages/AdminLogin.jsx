@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from '../assets/merch-inc-logo.png'
 
 function AdminLogin() {
+   const navigate = useNavigate()
 
    const [formData, setFormData] = useState({
-      email: '',         
+      email: '',
       password: '',
    })
    const [status, setStatus] = useState({ type: '', message: '' })
@@ -23,9 +25,16 @@ function AdminLogin() {
          return
       }
 
-      setStatus({ type: 'success', message: 'Logged in locally. Welcome back!' })
-      setFormData((prev) => ({ ...prev, email: '', password: '' }))
-      console.log('Form Data Submitted:', formData)
+      const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
+      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
+
+      if (formData.email !== adminEmail || formData.password !== adminPassword) {
+         setStatus({ type: 'error', message: 'Invalid admin credentials.' })
+         return
+      }
+
+      sessionStorage.setItem('isAdmin', 'true')
+      navigate('/admin')
    }
 
 
@@ -36,7 +45,6 @@ function AdminLogin() {
                <img src={logo} alt="Merch Inc Logo" className="w-20 h-auto" />
                <div>
                   <h1 className="text-xl font-semibold">Admin Log In</h1>
-                  <p className="text-gray-500">Access your Merch Inc workspace.</p>
                </div>
             </div>
             <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">

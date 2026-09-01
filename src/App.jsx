@@ -8,6 +8,7 @@ import Profile from './pages/Profile.jsx'
 import Confirmation from './pages/Confirmation.jsx'
 import Login from './pages/Login.jsx'
 import AdminLogin from './pages/AdminLogin.jsx'
+import Footer from './components/Footer.jsx'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/admin-login" element={<AdminLogin />} />
           </Routes>
       </main>
+      <Footer />
     </BrowserRouter>
   )
 }

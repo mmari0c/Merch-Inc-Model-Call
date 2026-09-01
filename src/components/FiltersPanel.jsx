@@ -11,13 +11,13 @@ const genderOptions = [
 ]
 
 const ethnicityOptions = [
-  { value: 'latino', label: 'Hispanic/Latino' },
-  { value: 'black', label: 'Black' },
-  { value: 'caucasian', label: 'White' },
+  { value: 'hispanic/latino', label: 'Hispanic/Latino' },
+  { value: 'black/african american', label: 'Black/African American' },
+  { value: 'white/caucasian', label: 'White/Caucasian' },
   { value: 'asian', label: 'Asian' },
   { value: 'middle eastern', label: 'Middle Eastern' },
   { value: 'native american', label: 'Native American' },
-  { value: 'pacific islander', label: 'Pacific Islander' },
+  { value: 'native hawaiian/pacific islander', label: 'Native Hawaiian/Pacific Islander' },
   { value: 'other', label: 'Other' },
 ]
 

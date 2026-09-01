@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icons } from '../icons.js'
+import logo from '../assets/merch-inc-logo.png'
 
 function StageStatus({
   label,
@@ -15,8 +16,8 @@ function StageStatus({
   const canControlFlow = typeof onAdvanceStage === 'function'
   const normalizedStatus = String(status || '').toLowerCase().replace(/\s+/g, '-')
   const showDesignerInstructions =
-    (role == 'designer' || role == 'model') &&
-    (normalizedStatus === 'selection' || normalizedStatus === 'final-selection')
+    role === 'model' ||
+    (role === 'designer' && (normalizedStatus === 'review' || normalizedStatus === 'final-selection'))
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false)
 
   const handleInstructionsToggle = () => {
@@ -26,14 +27,14 @@ function StageStatus({
     setIsInstructionsOpen(false)
   }
   return (
-    <div className="bg-white p-5 rounded-xl border-2 border-gray-200 flex flex-col gap-4 text-xs sm:text-sm">
-      <div className="relative flex flex-row justify-between items-center gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="w-full bg-white border-b-2 border-gray-200 px-6 py-4  items-center gap-4 text-xs sm:text-sm">
+      <div className="relative flex justify-between items-center gap-4 ml-auto">
         <div className='flex items-center gap-3'>
-          <FontAwesomeIcon className="text-lg lg:text-xl text-gray-500" icon={icons.stageStatus} />
+          <img src={logo} alt="Merch Inc Logo" className="h-20 w-auto shrink-0" />
           <div>
-            <p className="mb-2">
+            <p className="mb-1">
               {label}:{' '}
-              <span className="bg-sand-100 text-sand-900 rounded-xl px-2 py-1">
+              <span className="bg-gray-100 rounded-xl px-2 py-1">
                 {status}
               </span>
             </p>
@@ -63,49 +64,49 @@ function StageStatus({
                   onClick={handleInstructionsClose}
                   aria-label="Close instructions"
                 />
-                <div className="absolute right-0 top-12 z-20 w-72 rounded-lg border border-sand-100 bg-sand-50 p-4 text-sand-900 shadow-lg">
+                <div className="absolute right-0 top-16 z-20 w-72 rounded-lg border border-gray-100 bg-white p-4 text-sand-900 shadow-lg">
                   <p className="mb-2 font-medium">
                     {role === 'model' ? 'What to Expect' :
-                       normalizedStatus === 'selection'
-                      ? 'Selection Instructions'
+                       normalizedStatus === 'review'
+                      ? 'Review Instructions'
                       : 'Final Selection Instructions'
                     }
                   </p>
                   {role === 'model' ? (
                     <ol className="list-decimal space-y-3 pl-5">
                       <li>
-                        <p><strong>Stay Updated: </strong>Keep an eye on your Starlist and final selection status as designers make their choices.</p>
+                        <p><strong>Sit tight: </strong>Designers are browsing profiles. No action needed!</p>
                       </li>
                       <li>
-                        <p><strong>Be Ready: </strong>If selected, ensure your contact information is up-to-date for further communication.</p>
+                        <p><strong>Watch your star: </strong>If a designer adds you to their Starlist, the star on your profile will light up in gold.</p>
                       </li>
                       <li>
-                        <p><strong>Keep Engaged: </strong>Continue to update your profile and stay active in the community for better visibility.</p>
+                        <p><strong>If selected: </strong>Your screen will automatically update letting you know you have been chosen.</p>
                       </li>
                     </ol>
                   ) : (
-                    normalizedStatus === 'selection' ? (
+                    normalizedStatus === 'review' ? (
                       <ol className="list-decimal space-y-3 pl-5">
                         <li>
-                          <p><strong>Review and Star: </strong>Browse available models and click the star to add them to your Starlist. Open a model card to view full details.</p>
+                          <p><strong>Browse models: </strong>Open a model card to view full details like height, measurements, and photos.</p>
                         </li>
                         <li>
-                          <p><strong>Wait for Your Turn: </strong>When it is your turn, move your Starlist picks into your final selection.</p>
+                          <p><strong>Build your starlist: </strong>Click the star on any model you are interested in to save them to your Starlist.</p>
                         </li>
                         <li>
-                          <p><strong>Get Ready: </strong>Keep your Starlist updated so final selections are quick when the stage advances.</p>
+                          <p><strong>Stay ready: </strong>Final Selection is next. Keep your Starlist updated so your picks are ready to go.</p>
                         </li>
                       </ol>
                     ) : (
                       <ol className="list-decimal space-y-3 pl-5">
                         <li>
-                          <p><strong>Select from Starlist: </strong>Choose your final models from the Starlist panel.</p>
+                          <p><strong>Wait for your turn: </strong>Designers are called in order. Check the queue panel to see your position.</p>
                         </li>
                         <li>
-                          <p><strong>Review Choices: </strong>Double-check model details before confirming your lineup.</p>
+                          <p><strong>Move to final selection: </strong>When it is your turn, click the plus icon next to a Starlist model to add them to your final selection.</p>
                         </li>
                         <li>
-                          <p><strong>Submit Final Selection: </strong>Click "Submit Final Selection" to lock in your choices.</p>
+                          <p><strong>Submit: </strong>Once you are happy with your choices, click "Submit Final Selection" to lock them in.</p>
                         </li>
                       </ol>
                     )
@@ -117,20 +118,18 @@ function StageStatus({
         )}
 
         {canControlFlow && (
-          <div className='flex flex-wrap items-center gap-3 border-t border-gray-100 pt-4 md:border-0 md:pt-0'>
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-sm text-xs sm:text-sm transition-colors ${
-                isAdvanceDisabled
-                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-black text-white hover:bg-black/80'
-              }`}
-              onClick={onAdvanceStage}
-              disabled={isAdvanceDisabled}
-            >
-              {actionLabel || 'Advance Stage'}
-            </button>
-          </div>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded-sm text-xs sm:text-sm transition-colors ${
+              isAdvanceDisabled
+                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                : 'bg-black text-white hover:bg-black/80'
+            }`}
+            onClick={onAdvanceStage}
+            disabled={isAdvanceDisabled}
+          >
+            {actionLabel || 'Advance Stage'}
+          </button>
         )}
       </div>
     </div>

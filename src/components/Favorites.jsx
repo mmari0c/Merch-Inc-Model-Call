@@ -4,7 +4,7 @@ import { icons } from '../icons.js'
 function Favorites({ index, name, modelNumber, isFinalSelection, finalSelectionToggle }) {
    
    return (
-      <div className={`${isFinalSelection ? 'bg-sand-100 border-sand-200' : 'bg-white border-gray-200'} p-4 rounded-lg border flex items-center gap-3 justify-between md:flex-col lg:flex-row`}>
+      <div className={`${isFinalSelection ? 'bg-gray-100 border-gray-200' : 'bg-white border-gray-200'} p-4 rounded-lg border flex items-center gap-3 justify-between md:flex-col lg:flex-row`}>
          <div className="flex items-center gap-3">
             <p>{index + 1}.</p>
             <div className="flex flex-col">

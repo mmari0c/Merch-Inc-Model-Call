@@ -36,7 +36,7 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
 
    const renderPhoto = (photo, className) => (
       <div
-         className={`relative w-full h-64 sm:h-72 md:h-80 overflow-hidden rounded-xl border border-gray-200 ${className} ${photo.className || ''}`}
+         className={`relative w-full h-80 sm:h-96 md:h-[28rem] overflow-hidden ${className} ${photo.className || ''}`}
       >
          {photo.url ? (
             <img
@@ -50,12 +50,14 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
 
    return (
    <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 text-xs sm:text-sm' onClick={() => onClose()}>
-        <div className='bg-white rounded-xl p-6 max-w-lg w-full relative shadow-2xl m-4 max-h-[90vh] overflow-y-auto' onClick={(e) => e.stopPropagation()}>
-          <h3 className='font-semibold mb-1'>{model.name.charAt(0).toUpperCase() + model.name.slice(1)}</h3>
-          <p className='text-gray-600 mb-4'>#{model.modelNumber}</p>
-          <button className='absolute top-3 right-3 text-gray-600 hover:text-gray-700' aria-label='Close details' onClick={() => onClose()}>
+        <div className='bg-white rounded-xl max-w-lg w-full relative shadow-2xl m-4' onClick={(e) => e.stopPropagation()}>
+          <button className='absolute top-3 right-3 z-10 text-gray-600 hover:text-gray-700 bg-white/80 rounded-full w-7 h-7 flex items-center justify-center' aria-label='Close details' onClick={() => onClose()}>
             ✕
           </button>
+          <div className='px-6 pt-5 pb-3'>
+            <h3 className='font-semibold'>{model.name.charAt(0).toUpperCase() + model.name.slice(1)}</h3>
+            <p className='text-gray-600'>#{model.modelNumber}</p>
+          </div>
           <div className="relative w-full mb-4">
             {renderPhoto(photos[activePhotoIndex], '')}
             {hasMultiplePhotos ? (
@@ -88,7 +90,7 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
             ) : null}
           </div>
 
-         <div className='flex flex-col gap-2'>
+         <div className='flex flex-col gap-2 px-6 pb-6'>
             <div className=''>
                {instagramHandle ? (
                   <a
@@ -120,19 +122,10 @@ function ModelDetails({ selectedModel, onClose, onFavoriteToggle}) {
                <label className='text-gray-600'>Weight</label>
                <p className='font-medium'>{model.weight}</p>
             </div>
-            <div>
-               <label className='text-gray-600'>Measurements</label>
-               <p className='font-medium'> 
-                  {model.measurements.bust && `Bust: ${model.measurements.bust} `}
-                  {model.measurements.chest && `Chest: ${model.measurements.chest} `}
-                  {model.measurements.waist && `Waist: ${model.measurements.waist} `}
-                  {model.measurements.hips && `Hips: ${model.measurements.hips}`}
-               </p>
-            </div>
          </div> 
 
           </div>
-          <div className='mt-6 flex gap-3'>
+          <div className='mt-6 flex gap-3 px-6 pb-6'>
             <button
               className={`mt-auto w-full${selectedModel.available ? '' : ' opacity-50 cursor-not-allowed'} bg-black border  py-2 rounded-sm hover:bg-black/90 transition-colors flex items-center justify-center gap-2 text-white`}
               onClick={handleFavoriteClick}

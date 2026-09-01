@@ -25,11 +25,15 @@ function ModelCard({ model , onSelect, onFavoriteToggle}) {
       }}
     >
       <div className="relative w-full">
-        <img
-          className="w-full rounded-lg"
-          src="https://fpoimg.com/450x500?text=Preview&bg_color=e6e6e6&text_color=8F8F8F"
-          alt=""
-        />
+        <div
+          className="w-full rounded-lg bg-gray-200 overflow-hidden"
+          style={{ aspectRatio: '9 / 10' }}
+          aria-hidden="true"
+        >
+          {model.coverPhoto && (
+            <img src={model.coverPhoto} alt={model.name} className="w-full h-full object-cover" />
+          )}
+        </div>
         <button
           className="absolute right-2 top-2 bg-noneflex px-2 py-1 text-xl"
           onClick={handleFavoriteClick}
@@ -38,7 +42,7 @@ function ModelCard({ model , onSelect, onFavoriteToggle}) {
         >
           {model.available ? (
             <>
-              <FontAwesomeIcon className='text-white bg-gray-200 opacity-80' icon={model.isFavorite ? icons.favoriteSolid : icons.favorite}/>
+              <FontAwesomeIcon className='text-white h-10' icon={model.isFavorite ? icons.favoriteSolid : icons.favorite}/>
             </>
           ) : (
             <>
