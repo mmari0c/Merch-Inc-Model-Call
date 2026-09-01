@@ -119,8 +119,8 @@ function StarlistPanel({
             aria-label='Close starlist'
             onClick={onCloseStarlist}
           />
-          <div className='absolute right-0 top-0 h-full w-[78%] max-w-[18rem] bg-white p-5 shadow-xl overflow-y-auto flex flex-col gap-4'>
-            <div className='flex items-center justify-between mb-4'>
+          <div className='absolute right-0 top-0 h-full w-[78%] max-w-[18rem] bg-white p-5 shadow-xl overflow-y-auto flex flex-col gap-6'>
+            <div className='flex items-center justify-between'>
               <p className='flex items-center gap-2'>
                 Starlist{' '}
                 <FontAwesomeIcon className='text-amber-500' icon={icons.favoriteSolid} />
@@ -133,25 +133,44 @@ function StarlistPanel({
                 Close
               </button>
             </div>
-            <button className='w-full bg-white p-2 rounded-lg border-2 border-dashed border-gray-200 hover:bg-gray-100 transition-colors mb-4'>
-              Add Self
-            </button>
-            {favoriteModels.length === 0 && (
-              <p className='text-gray-500'>You haven't starred anyone yet.</p>
+
+            {hasQueuePanel && (
+              <div className={(isMyTurn ? 'bg-black text-white' : 'bg-white') + ' p-4 rounded-xl border border-gray-200 flex flex-col gap-2 items-center text-center'}>
+                {hasSubmitted ? (
+                  <p className='font-medium text-gray-500'>You have already submitted your selection.</p>
+                ) : isMyTurn ? (
+                  <p className='font-medium flex items-center gap-2'>
+                    <FontAwesomeIcon className='text-lg' icon={icons.bell} />
+                    It is your turn to select!
+                  </p>
+                ) : (
+                  <div className='flex flex-col gap-1'>
+                    <p className='font-medium'>You are <strong>#{positionInQueue + 1}</strong> in queue</p>
+                    <p className='text-gray-500'>{remaining} designer{remaining !== 1 ? 's' : ''} ahead of you</p>
+                  </div>
+                )}
+              </div>
             )}
-            {favoriteModels.map((fav, index) => (
-              <Favorites
-                key={fav.modelNumber}
-                index={index}
-                name={fav.name}
-                modelNumber={fav.modelNumber}
-                isFinalSelection={fav.isFinalSelection}
-                finalSelectionToggle={() => onSelectionToggle(fav.modelNumber)}
-              />
-            ))}
+
+            <div className='flex flex-col gap-4'>
+              {favoriteModels.length === 0 && (
+                <p className='text-gray-500'>You haven't starred anyone yet.</p>
+              )}
+              {favoriteModels.map((fav, index) => (
+                <Favorites
+                  key={fav.modelNumber}
+                  index={index}
+                  name={fav.name}
+                  modelNumber={fav.modelNumber}
+                  isFinalSelection={fav.isFinalSelection}
+                  finalSelectionToggle={() => onSelectionToggle(fav.modelNumber)}
+                />
+              ))}
+            </div>
+
             {finalSelection.length > 0 && (
-              <div className='mt-6 border-t border-gray-100 pt-4 flex flex-col gap-4'>
-                <p className='mb-3 font-medium'>Final Selection</p>
+              <div className='flex flex-col gap-4'>
+                <p>Final Selection</p>
                 {finalSelection.map((fav, index) => (
                   <FinalSelection
                     key={fav.modelNumber}
@@ -162,29 +181,13 @@ function StarlistPanel({
                   />
                 ))}
                 <button
-                  className='w-full rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-black/90 transition-colors disabled:cursor-not-allowed disabled:opacity-50'
+                  className='w-full rounded-lg bg-black p-3 text-white flex items-center justify-center gap-2 hover:bg-black/90 transition-colors disabled:cursor-not-allowed disabled:bg-gray-300'
                   disabled={!isMyTurn}
                   onClick={submitFinalSelection}
                 >
                   <FontAwesomeIcon className='text-lg' icon={icons.paperPlane} />
                   {submitLabel}
                 </button>
-              </div>
-            )}
-            {hasQueuePanel && (
-              <div className='mt-auto pt-8'>
-                <div className={(isMyTurn ? 'rounded-xl border border-gray-200 bg-black text-white p-4 text-center' : 'rounded-xl border border-gray-200 bg-white p-4 text-center')}>
-                {isMyTurn ? (
-                  <p className='font-medium'>
-                    It's your turn to select!
-                  </p>
-                ) : (
-                  <div className='flex flex-col gap-1'>
-                    <p className='font-medium'>You're <strong className='text-sand-600'>#{positionInQueue + 1}</strong> in queue</p>
-                    <p className='text-gray-500'>{remaining} designer{remaining !== 1 ? 's' : ''} ahead of you</p>
-                  </div>
-                )}
-                </div>
               </div>
             )}
           </div>
