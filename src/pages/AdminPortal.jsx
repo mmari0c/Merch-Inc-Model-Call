@@ -252,7 +252,7 @@ function AdminPortal() {
   }
 
   return (
-    <div className="portal admin-portal h-screen flex flex-col text-sm">
+    <div className="portal admin-portal h-screen flex flex-col text-sm overflow-hidden">
       <StageStatus
         label="Current Stage"
         status={currentStage.label}
@@ -264,7 +264,7 @@ function AdminPortal() {
         isAdvanceDisabled={!nextStage}
       />
       <div className='flex flex-col items-center w-[90%] max-w-6xl mx-auto gap-6 mt-6 flex-1 min-h-0'>
-        <div className='w-full flex justify-end'>
+        <div className='w-full flex justify-end shrink-0'>
           <button
             type='button'
             className='px-4 py-2 rounded-sm border border-red-200 text-red-600 text-sm hover:bg-red-50 transition-colors'
@@ -345,7 +345,7 @@ function AdminPortal() {
         </div>
       </div>
 
-      <div className='w-full gap-4 text-center grid grid-cols-2 md:flex md:flex-row mb-5'>
+      <div className='w-full gap-4 text-center grid grid-cols-2 md:flex md:flex-row mb-5 shrink-0'>
         {stats.map((stat) => (
           <Stats key={stat.description} data={stat.data} description={stat.description} />
         ))}
