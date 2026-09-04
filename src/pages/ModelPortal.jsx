@@ -25,7 +25,7 @@ const STAGE_INFO = {
    model_walk: { label: 'Model Walk', description: 'Designers are reviewing models.' },
    review: { label: 'Review', description: 'Designers are shortlisting and reviewing their favorite models.' },
    final_selection: { label: 'Final Selection', description: 'Selections are being finalized.' },
-   end: { label: 'Complete', description: 'The model call has ended.' },
+   end: { label: 'Open Marketplace', description: 'Available models are still being claimed.' },
 }
 
 function ModelPortal() {
@@ -102,9 +102,6 @@ function ModelPortal() {
             .channel('model-call-stage')
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'model_call' }, (payload) => {
                setStage(payload.new.current_stage)
-               if (payload.new.current_stage === 'end') {
-                  navigate('/confirmation/model')
-               }
             })
             .subscribe()
 

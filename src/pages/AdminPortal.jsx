@@ -12,7 +12,7 @@ const CAMPAIGN_STAGES = [
   { key: 'model_walk', label: 'Model Walk', description: 'Models are walking the runway for initial impressions.' },
   { key: 'review', label: 'Review', description: 'Designers are shortlisting and reviewing their favorite models.' },
   { key: 'final_selection', label: 'Final Selection', description: 'Designers are making their final model choices.' },
-  { key: 'end', label: 'End', description: 'The model call process is complete.' },
+  { key: 'end', label: 'End', description: 'Open marketplace — designers can claim available models directly.' },
 ]
 
 const formatModelNumber = (num) => `M-${String(num).padStart(3, '0')}`
@@ -81,7 +81,7 @@ function AdminPortal() {
       // Realtime: designer skipped changes
       supabase
         .channel('admin-designers')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'designer' }, async () => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'designer' }, async () => {
           const { data: updatedDesigners } = await supabase
             .from('designer')
             .select('designer_id, name, designer_number, email, phone, skipped')
@@ -124,10 +124,10 @@ function AdminPortal() {
 
   const handleSkipDesigner = async (designerId) => {
     const isCurrentlySkipped = skippedDesignerIds.has(designerId)
-    const { error } = await supabase
-      .from('designer')
-      .update({ skipped: !isCurrentlySkipped })
-      .eq('designer_id', designerId)
+    const { error } = await supabase.rpc('skip_designer', {
+      p_designer_id: designerId,
+      p_skipped: !isCurrentlySkipped,
+    })
     if (!error) {
       setSkippedDesignerIds((prev) => {
         const next = new Set(prev)
@@ -263,7 +263,7 @@ function AdminPortal() {
         actionLabel={nextStage ? `Next: ${nextStage.label}` : 'All Stages Complete'}
         isAdvanceDisabled={!nextStage}
       />
-      <div className='flex flex-col items-center w-[90%] max-w-6xl mx-auto gap-6 mt-6 flex-1'>
+      <div className='flex flex-col items-center w-[90%] max-w-6xl mx-auto gap-6 mt-6 flex-1 min-h-0'>
         <div className='w-full flex justify-end'>
           <button
             type='button'
@@ -274,8 +274,8 @@ function AdminPortal() {
           </button>
         </div>
 
-      <div className='w-full flex-1 flex flex-col gap-5 md:flex-row md:justify-between'>
-        <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4 overflow-y-auto'>
+      <div className='w-full flex-1 min-h-0 flex flex-col gap-5 md:flex-row md:justify-between'>
+        <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4 overflow-y-auto min-h-0'>
           <h2>Designer Turn Order</h2>
           {designers.map((designer, index) => (
             <DesignerOrder
@@ -290,7 +290,7 @@ function AdminPortal() {
           ))}
         </div>
 
-        <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4'>
+        <div className='bg-white p-6 rounded-xl border-2 border-gray-200 w-full flex flex-col gap-4 overflow-y-auto min-h-0'>
           <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
             <h2>Picks Log</h2>
             <div className='flex flex-wrap items-center gap-2'>

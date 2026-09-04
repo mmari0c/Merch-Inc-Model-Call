@@ -40,7 +40,7 @@ const STAGE_INFO = {
    model_walk: { label: 'Model Walk', description: 'Designers are reviewing models.' },
    review: { label: 'Review', description: 'Designers are shortlisting and reviewing their favorite models.' },
    final_selection: { label: 'Final Selection', description: 'Selections are being finalized.' },
-   end: { label: 'Complete', description: 'The model call has ended.' },
+   end: { label: 'Open Marketplace', description: 'Browse and claim available models directly.' },
 }
 
 function DesignerPortal() {
@@ -92,6 +92,7 @@ function DesignerPortal() {
    useEffect(() => {
       let modelCallChannel
       let modelsChannel
+      let designerChannel
 
       const init = async () => {
          const { data: { user } } = await supabase.auth.getUser()
@@ -151,10 +152,6 @@ function DesignerPortal() {
 
          if (callData) {
             setStage(callData.current_stage)
-            if (callData.current_stage === 'end') {
-               navigate('/confirmation/designer')
-               return
-            }
          }
 
          setLoading(false)
@@ -164,9 +161,29 @@ function DesignerPortal() {
             .channel('designer-model-call')
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'model_call' }, (payload) => {
                setStage(payload.new.current_stage)
-               if (payload.new.current_stage === 'end') {
-                  navigate('/confirmation/designer')
-               }
+            })
+            .subscribe()
+
+         // Realtime: designer skipped changes
+         designerChannel = supabase
+            .channel('designer-skipped')
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'designer', filter: `designer_id=eq.${user.id}` }, (payload) => {
+               setIsSkipped(payload.new.skipped ?? false)
+            })
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'designer' }, async () => {
+               const { data: updatedDesigners } = await supabase
+                  .from('designer')
+                  .select('designer_id, name, skipped')
+                  .order('created_at', { ascending: true })
+               const updatedQueue = updatedDesigners || []
+               const { data: pickedNow } = await supabase
+                  .from('models')
+                  .select('designer_id')
+                  .not('designer_id', 'is', null)
+               const submittedNow = new Set(pickedNow?.map((m) => m.designer_id) || [])
+               const skippedNow = new Set(updatedQueue.filter((d) => d.skipped).map((d) => d.designer_id))
+               const doneNow = new Set([...submittedNow, ...skippedNow])
+               setRemaining(computeRemaining(updatedQueue, user.id, doneNow))
             })
             .subscribe()
 
@@ -201,6 +218,7 @@ function DesignerPortal() {
       return () => {
          if (modelCallChannel) supabase.removeChannel(modelCallChannel)
          if (modelsChannel) supabase.removeChannel(modelsChannel)
+         if (designerChannel) supabase.removeChannel(designerChannel)
       }
    }, [navigate, fetchModels, computeRemaining])
 
@@ -266,8 +284,10 @@ function DesignerPortal() {
       }
    }
 
+   const isMarketplace = stage === 'end'
+
    const handleSelectionToggle = (modelNumber) => {
-      if (hasSubmitted) return
+      if (hasSubmitted && !isMarketplace) return
       setModelsList((prev) =>
          prev.map((m) => m.modelNumber === modelNumber ? { ...m, isFinalSelection: !m.isFinalSelection } : m)
       )
@@ -285,7 +305,8 @@ function DesignerPortal() {
    }
 
    const handleSubmitSelection = async () => {
-      if (isSubmitting || !designerId || hasSubmitted) return
+      if (isSubmitting || !designerId) return
+      if (!isMarketplace && hasSubmitted) return
       setIsSubmitting(true)
 
       const selected = modelsList.filter((m) => m.isFinalSelection)
@@ -387,8 +408,9 @@ function DesignerPortal() {
                      profileName={designerName}
                      currentInQueue={queue.indexOf(designerName)}
                      remaining={remaining}
-                     hasSubmitted={hasSubmitted}
+                     hasSubmitted={hasSubmitted || isSkipped}
                      onSubmitSelection={handleSubmitSelection}
+                     isMarketplace={isMarketplace}
                   />
                </div>
             </div>

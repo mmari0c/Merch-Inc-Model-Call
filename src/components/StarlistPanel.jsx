@@ -17,14 +17,15 @@ function StarlistPanel({
   remaining: remainingProp,
   hasSubmitted,
   onSubmitSelection,
+  isMarketplace,
 }) {
   const navigate = useNavigate()
   const positionInQueue = Array.isArray(queue) ? queue.indexOf(profileName) : -1
   const currentPosition = Number.isInteger(currentInQueue) ? currentInQueue : 0
   const hasQueuePanel = stageStatus === 'Final Selection' && positionInQueue >= 0
   const remaining = remainingProp !== undefined ? remainingProp : 0
-  const isMyTurn = hasQueuePanel && remaining <= 0 && !hasSubmitted
-  const submitLabel = 'Submit Final Selection'
+  const isMyTurn = isMarketplace ? finalSelection.length > 0 : hasQueuePanel && remaining <= 0 && !hasSubmitted
+  const submitLabel = isMarketplace ? 'Claim Models' : 'Submit Final Selection'
 
   const submitFinalSelection = () => {
     if (onSubmitSelection) {
@@ -47,7 +48,7 @@ function StarlistPanel({
   return (
     <>
       <div className='hidden sm:sticky md:top-0 md:pt-2 md:flex md:flex-col md:gap-6 w-full'>
-        {hasQueuePanel && (
+        {hasQueuePanel && !isMarketplace && (
           <div className={(isMyTurn ? 'bg-black text-white' : 'bg-white') + ' p-6 rounded-xl border border-gray-200 flex flex-col gap-2 h-fit items-center text-center'}>
             {hasSubmitted ? (
               <p className='font-medium text-gray-500'>You have already submitted your selection.</p>
@@ -134,7 +135,7 @@ function StarlistPanel({
               </button>
             </div>
 
-            {hasQueuePanel && (
+            {hasQueuePanel && !isMarketplace && (
               <div className={(isMyTurn ? 'bg-black text-white' : 'bg-white') + ' p-4 rounded-xl border border-gray-200 flex flex-col gap-2 items-center text-center'}>
                 {hasSubmitted ? (
                   <p className='font-medium text-gray-500'>You have already submitted your selection.</p>
